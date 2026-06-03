@@ -1,0 +1,8 @@
+.scroll-reveal { margin: 0; }
+.scroll-reveal-text { display: flex; flex-wrap: wrap; margin: 0; }
+.word { display: inline-block; white-space: pre; }
+.scroll-reveal-text.break-anywhere .word {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
