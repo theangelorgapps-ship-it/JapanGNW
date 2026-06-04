@@ -10,6 +10,10 @@ const DATE_VENUE_LOGO_URL = 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVs
 const GOODNEWS_DAILY_LOGO_URL = 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a203c12b75a113972d5cc41.webp';
 const WISTIA_PLAYER_URL = 'https://fast.wistia.net/player.js';
 const SPONSOR_WISTIA_URL = 'https://fast.wistia.net/embed/iframe/l9da91olq5?web_component=true&seo=false';
+const ZOHO_ATTENDANCE_FORM_URL =
+  'https://forms.zohopublic.eu/rikki/form/LetUsKnowYoureComing/formperma/HXE-JEIrRKpAvUyNGhJ8wQmyaP3L2wKVsRK1zdSJPSo';
+const ZOHO_HEALING_FORM_URL =
+  'https://forms.zohopublic.eu/rikki/form/YourHealingClassroomAugustSessionwithTheRaahProphe/formperma/aKDRnUqNo_x0COJZBFJLc_aXWSKBBRTe3HiaRGL43Ig';
 const VENUE_MAP_URL =
   'https://www.google.com/maps/place//data=!4m2!3m1!1s0x6018dd914443816b:0x289a3ef1c6c5b4eb?entry=gemini&utm_source=gemini&utm_campaign=gem-default';
 
@@ -294,6 +298,89 @@ const sponsorSectionCopy = {
   },
 };
 
+const legalCopy = {
+  privacy: {
+    eyebrow: 'Privacy Policy / プライバシーポリシー',
+    title: 'Privacy Policy',
+    titleJa: 'プライバシーポリシー',
+    updated: 'Effective for GoodNews Japan 2026',
+    sections: [
+      {
+        heading: 'Information we collect',
+        body:
+          'When you register, sponsor, contact us, or open an embedded form, we may collect details such as your name, email address, phone number, country, attendance preferences, donation information, and any message you choose to submit.',
+        headingJa: '収集する情報',
+        bodyJa:
+          '登録、スポンサー、問い合わせ、または埋め込みフォームの利用時に、お名前、メールアドレス、電話番号、国、参加希望、寄付に関する情報、および任意で送信されるメッセージを収集する場合があります。',
+      },
+      {
+        heading: 'How we use information',
+        body:
+          'We use this information to manage GoodNews Japan 2026 attendance, communicate event updates, support healing-line and sponsor workflows, respond to inquiries, and improve the event experience.',
+        headingJa: '情報の利用目的',
+        bodyJa:
+          'GoodNews Japan 2026の参加管理、イベント更新の連絡、ヒーリングラインおよびスポンサー手続きのサポート、お問い合わせへの返信、イベント体験の改善のために利用します。',
+      },
+      {
+        heading: 'Embedded services',
+        body:
+          'This site uses trusted third-party embeds, including Zoho Forms, Donorbox, Wistia, Google Maps, and media/CDN providers. These services may process information according to their own privacy policies.',
+        headingJa: '外部サービス',
+        bodyJa:
+          '本サイトでは、Zoho Forms、Donorbox、Wistia、Google Maps、メディア/CDNプロバイダーなどの信頼できる外部埋め込みサービスを使用します。これらのサービスは各社のプライバシーポリシーに従って情報を処理する場合があります。',
+      },
+      {
+        heading: 'Your choices',
+        body:
+          'You may contact the GoodNewsWorld team to request access, correction, or deletion of personal information submitted through this event site, subject to legal and operational requirements.',
+        headingJa: 'お客様の選択',
+        bodyJa:
+          '本イベントサイトを通じて送信された個人情報について、法令および運営上必要な範囲を除き、開示、訂正、削除をGoodNewsWorldチームへ依頼できます。',
+      },
+    ],
+  },
+  terms: {
+    eyebrow: 'Terms / 利用規約',
+    title: 'Terms of Use',
+    titleJa: '利用規約',
+    updated: 'For GoodNews Japan 2026 visitors, registrants, and sponsors',
+    sections: [
+      {
+        heading: 'Event information',
+        body:
+          'GoodNews Japan 2026 details, schedules, venue information, registration capacity, and sponsor opportunities may be updated as planning develops. Please check official communications for final instructions.',
+        headingJa: 'イベント情報',
+        bodyJa:
+          'GoodNews Japan 2026の詳細、スケジュール、会場情報、登録枠、スポンサー機会は、準備の進行に伴い更新される場合があります。最終案内は公式連絡をご確認ください。',
+      },
+      {
+        heading: 'Registration and attendance',
+        body:
+          'Submitting a registration form does not guarantee entry where capacity, verification, safety, or venue requirements apply. Attendees are responsible for travel, accommodation, and following event staff instructions.',
+        headingJa: '登録と参加',
+        bodyJa:
+          '登録フォームの送信は、定員、確認、安全、会場要件が適用される場合の入場を保証するものではありません。参加者は交通・宿泊の手配およびイベントスタッフの案内に従う責任があります。',
+      },
+      {
+        heading: 'Sponsorship and donations',
+        body:
+          'Sponsorships and donations are processed through Donorbox or other approved payment providers. Payment terms, confirmations, and refunds are handled according to the provider and GoodNewsWorld event policies.',
+        headingJa: 'スポンサーシップと寄付',
+        bodyJa:
+          'スポンサーシップおよび寄付は、Donorboxまたは承認された決済プロバイダーを通じて処理されます。決済条件、確認、返金は、各プロバイダーおよびGoodNewsWorldのイベント方針に従って取り扱われます。',
+      },
+      {
+        heading: 'Website use',
+        body:
+          'Please do not misuse this site, interfere with embedded forms or payment services, copy protected media without permission, or submit false or harmful information.',
+        headingJa: 'ウェブサイトの利用',
+        bodyJa:
+          '本サイトの不正利用、埋め込みフォームや決済サービスへの妨害、許可のない保護されたメディアの複製、虚偽または有害な情報の送信は禁止されています。',
+      },
+    ],
+  },
+};
+
 function App() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const frameImagesRef = useRef<HTMLImageElement[]>([]);
@@ -301,15 +388,36 @@ function App() {
   const screen3Ref = useRef<HTMLDivElement | null>(null);
   const sponsorVideoRef = useRef<HTMLDivElement | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isPreloaderVisible, setIsPreloaderVisible] = useState(true);
   const [isHealingDetailsOpen, setIsHealingDetailsOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+  const [isAttendanceOpen, setIsAttendanceOpen] = useState(false);
+  const [isHealingFormOpen, setIsHealingFormOpen] = useState(false);
   const [isSponsorOpen, setIsSponsorOpen] = useState(false);
+  const [legalModal, setLegalModal] = useState<'privacy' | 'terms' | null>(null);
   const [isSponsorEmbedReady, setIsSponsorEmbedReady] = useState(false);
   const [isSharedLanguageVisible, setIsSharedLanguageVisible] = useState(true);
   const [revealLanguage, setRevealLanguage] = useState<'en' | 'ja'>('en');
   const [attendanceLanguage, setAttendanceLanguage] = useState<'en' | 'ja'>('en');
   const { scrollY } = useScroll();
   const headerY = useTransform(scrollY, [0, 500, 800], [0, 0, -150]);
+  const shouldPreviewPreloader =
+    typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('preloader');
+  const attendanceFormUrl =
+    typeof window === 'undefined'
+      ? ZOHO_ATTENDANCE_FORM_URL
+      : `${ZOHO_ATTENDANCE_FORM_URL}?referrername=${encodeURIComponent(window.location.href.slice(0, 1800))}`;
+  const healingFormUrl =
+    typeof window === 'undefined'
+      ? ZOHO_HEALING_FORM_URL
+      : `${ZOHO_HEALING_FORM_URL}?referrername=${encodeURIComponent(window.location.href.slice(0, 1800))}`;
+
+  useEffect(() => {
+    if (!isLoaded || shouldPreviewPreloader) return;
+
+    const hideTimer = window.setTimeout(() => setIsPreloaderVisible(false), 900);
+    return () => window.clearTimeout(hideTimer);
+  }, [isLoaded, shouldPreviewPreloader]);
 
   useEffect(() => {
     const interval = window.setInterval(() => {
@@ -486,29 +594,45 @@ function App() {
 
   return (
     <div className="min-h-screen bg-black font-sans text-white selection:bg-white selection:text-black">
-      {!isLoaded && (
-        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden bg-black">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,rgba(185,145,48,0.2)_0%,rgba(26,26,26,0.38)_32%,rgba(0,0,0,1)_76%)]" />
-          <div className="absolute inset-x-8 top-1/2 h-px bg-white/10" />
-          <div className="relative flex flex-col items-center">
-            <div className="relative flex h-28 w-28 items-center justify-center md:h-32 md:w-32">
-              <div className="animate-preloader-pulse absolute inset-0 rounded-full border border-[#b99130]/50" />
-              <div className="absolute inset-3 rounded-full border border-white/10" />
-              <WisaLogo className="h-20 w-20 md:h-24 md:w-24" />
+      {(isPreloaderVisible || shouldPreviewPreloader) && (
+        <div
+          className={`fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden bg-[#080806] ${
+            isLoaded && !shouldPreviewPreloader ? 'animate-preloader-dissolve pointer-events-none' : ''
+          }`}
+        >
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(215,180,90,0.18)_0%,rgba(22,20,16,0.72)_34%,rgba(0,0,0,0.98)_78%)]" />
+          <div className="animate-preloader-pattern absolute inset-0 opacity-40 [background-image:linear-gradient(90deg,transparent_0_18%,rgba(215,180,90,0.14)_18.4%,transparent_19%,transparent_48%,rgba(215,180,90,0.1)_48.4%,transparent_49%),radial-gradient(circle_at_18%_72%,transparent_0_9%,rgba(215,180,90,0.16)_9.4%,transparent_10%,transparent_14%,rgba(215,180,90,0.1)_14.4%,transparent_15%),radial-gradient(circle_at_86%_24%,transparent_0_8%,rgba(215,180,90,0.14)_8.4%,transparent_9%,transparent_13%,rgba(215,180,90,0.08)_13.4%,transparent_14%)]" />
+          <div className="absolute inset-x-8 top-1/2 h-px bg-[#d7b45a]/14" />
+          {[
+            ['left-[12%] top-[-8%] h-3 w-2 [--petal-x:22vw]'],
+            ['left-[27%] top-[-12%] h-4 w-2 [--petal-x:-16vw] [animation-delay:1.2s]'],
+            ['left-[72%] top-[-10%] h-3 w-2 [--petal-x:-24vw] [animation-delay:0.7s]'],
+            ['left-[88%] top-[-18%] h-4 w-2 [--petal-x:-34vw] [animation-delay:2.1s]'],
+            ['left-[45%] top-[-16%] h-3 w-2 [--petal-x:18vw] [animation-delay:3.2s]'],
+          ].map(([className], index) => (
+            <span
+              key={index}
+              className={`preloader-petal absolute rounded-full bg-[#d7b45a]/75 blur-[0.2px] ${className}`}
+            />
+          ))}
+          <div className="relative flex w-[90%] max-w-[720px] flex-col items-center text-center">
+            <div className="animate-preloader-medallion relative flex h-32 w-32 items-center justify-center md:h-40 md:w-40">
+              <div className="absolute inset-0 rounded-full bg-[#d7b45a]/10 blur-3xl" />
+              <WisaLogo className="relative z-[1] h-24 w-24 drop-shadow-[0_0_36px_rgba(215,180,90,0.45)] md:h-32 md:w-32" />
             </div>
-            <div className="mt-8 text-center">
-              <div className="font-mono text-[10px] font-bold uppercase tracking-[0.28em] text-[#d7b45a]/80">
-                GoodNews Japan
+            <div className="animate-preloader-title-rise mt-8">
+              <div className="text-[clamp(2rem,5vw,4.4rem)] font-semibold leading-none tracking-tight text-[#e9c76c] drop-shadow-[0_8px_24px_rgba(0,0,0,0.65)]">
+                GoodNews Japan 2026
               </div>
-              <div className="mt-3 text-[clamp(2rem,5vw,4rem)] font-medium leading-none tracking-tight text-white">
-                2026
+              <div className="mt-4 text-sm font-medium leading-snug text-[#f0d794]/90 md:text-base">
+                ラー（The Ra'ah）ウエバート・エンジェル預言者と共に
+              </div>
+              <div className="mt-2 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[#f0d794]/80 md:text-xs">
+                With The Ra'ah - Prophet Uebert Angel
               </div>
             </div>
-            <div className="mt-9 h-[2px] w-72 overflow-hidden bg-white/10">
+            <div className="mt-9 h-[2px] w-72 max-w-full overflow-hidden bg-[#d7b45a]/12">
               <div className="animate-preloader-sweep h-full w-1/3 bg-[#d7b45a]" />
-            </div>
-            <div className="mt-5 font-mono text-[10px] uppercase tracking-[0.2em] text-white/35">
-              Preparing the arrival
             </div>
           </div>
         </div>
@@ -525,18 +649,18 @@ function App() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="fixed left-1/2 top-4 z-20 w-[88%] max-w-[560px] -translate-x-1/2 pointer-events-auto md:top-5"
+        className="fixed left-1/2 top-3 z-20 w-[min(72vw,390px)] -translate-x-1/2 pointer-events-auto sm:top-4 md:w-[min(52vw,440px)]"
       >
-        <nav className="flex items-center rounded-full border border-white/20 bg-[#1A1A1A]/62 px-2.5 py-1.5 shadow-2xl shadow-black/30 backdrop-blur-[80px] sm:px-4 sm:py-2 md:px-5">
+        <nav className="flex items-center rounded-full border border-white/15 bg-[#1A1A1A]/58 px-2 py-1.5 shadow-xl shadow-black/25 backdrop-blur-[80px] sm:px-2.5 sm:py-2 md:px-3">
           <a
             href="#home"
             aria-label="GoodNews Japan home"
-            className="flex h-8 w-10 shrink-0 items-center justify-center sm:h-10 sm:w-12 md:w-14"
+            className="flex h-7 w-8 shrink-0 items-center justify-center sm:h-8 sm:w-10 md:h-9 md:w-11"
           >
-            <WisaLogo className="h-7 w-7 sm:h-9 sm:w-9 md:h-10 md:w-10" />
+            <WisaLogo className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8" />
           </a>
-          <div className="mx-2 h-7 w-px bg-white/20 sm:mx-3 sm:h-8" />
-          <div className="grid min-w-0 flex-1 grid-cols-3 items-center gap-1 text-center font-sans text-[12px] font-semibold tracking-[-0.01em] text-white/84 sm:gap-2 sm:text-sm md:gap-4 md:text-base">
+          <div className="mx-1.5 h-6 w-px bg-white/18 sm:mx-2 sm:h-7" />
+          <div className="grid min-w-0 flex-1 grid-cols-3 items-center gap-0 text-center font-sans text-[11px] font-semibold tracking-[-0.01em] text-white/84 sm:text-xs md:text-[13px]">
             {[
               ['Home', '#home'],
               ['About', '#about'],
@@ -545,7 +669,7 @@ function App() {
               <a
                 key={label}
                 href={href}
-                className="rounded-full px-1.5 py-1.5 transition-colors hover:bg-white/10 hover:text-white sm:px-2 md:px-3"
+                className="rounded-full px-0.5 py-1.5 transition-colors hover:bg-white/10 hover:text-white sm:px-1"
               >
                 {label}
               </a>
@@ -629,6 +753,95 @@ function App() {
         </motion.div>
       )}
 
+      {isAttendanceOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 z-40 flex items-center justify-center bg-black/75 px-4 py-6 backdrop-blur-md"
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 24, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            className="relative w-full max-w-[720px] overflow-hidden border border-white/10 bg-white shadow-2xl"
+          >
+            <div className="flex items-start justify-between gap-5 bg-[#101010] px-5 py-5 pr-20 text-white md:px-7">
+              <div>
+                <p className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-[#d7b45a]/80">
+                  GoodNews Japan 2026
+                </p>
+                <h2 className="mt-2 text-[clamp(1.35rem,3vw,2rem)] font-medium leading-tight tracking-tight">
+                  お越しになる際はお知らせください
+                  <br />
+                  Let Us Know You're Coming
+                </h2>
+              </div>
+              <button
+                type="button"
+                aria-label="Close attendance form"
+                onClick={() => setIsAttendanceOpen(false)}
+                className="absolute right-4 top-4 flex h-10 w-10 shrink-0 items-center justify-center bg-white/10 text-white transition-colors hover:bg-white hover:text-black"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <iframe
+              id="ziframe_200345"
+              aria-label="Let Us Know You're Coming"
+              frameBorder="0"
+              style={{ height: 500, width: '99%', border: 'none' }}
+              src={attendanceFormUrl}
+              title="Let Us Know You're Coming"
+            />
+          </motion.div>
+        </motion.div>
+      )}
+
+      {isHealingFormOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 z-40 flex items-center justify-center bg-black/75 px-4 py-6 backdrop-blur-md"
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 24, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            className="relative w-full max-w-[720px] overflow-hidden border border-white/10 bg-white shadow-2xl"
+          >
+            <div className="flex items-start justify-between gap-5 bg-[#101010] px-5 py-5 pr-20 text-white md:px-7">
+              <div>
+                <p className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-[#d7b45a]/80">
+                  GoodNews Japan 2026
+                </p>
+                <h2 className="mt-2 text-[clamp(1.25rem,3vw,2rem)] font-medium leading-tight tracking-tight">
+                  グッドニュース・ジャパン・ヒーリング・ライン
+                  <br />
+                  GoodNews Japan Healing line
+                </h2>
+              </div>
+              <button
+                type="button"
+                aria-label="Close healing line form"
+                onClick={() => setIsHealingFormOpen(false)}
+                className="absolute right-4 top-4 flex h-10 w-10 shrink-0 items-center justify-center bg-white/10 text-white transition-colors hover:bg-white hover:text-black"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <iframe
+              id="ziframe_894249"
+              aria-label="Your Healing Classroom - August Session with The Ra'ah - Prophet Uebert Angel (JAPAN)"
+              frameBorder="0"
+              allow="geolocation;"
+              style={{ height: 500, width: '99%', border: 'none' }}
+              src={healingFormUrl}
+              title="GoodNews Japan Healing line"
+            />
+          </motion.div>
+        </motion.div>
+      )}
+
       {isSponsorOpen && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -645,19 +858,11 @@ function App() {
               type="button"
               aria-label="Close sponsor form"
               onClick={() => setIsSponsorOpen(false)}
-              className="absolute right-4 top-4 z-10 flex h-11 w-11 items-center justify-center bg-white/10 text-white transition-colors hover:bg-white hover:text-black"
+              className="absolute right-4 top-4 z-10 flex h-11 w-11 items-center justify-center bg-black/70 text-white backdrop-blur-md transition-colors hover:bg-white hover:text-black"
             >
               <X className="h-5 w-5" />
             </button>
             <div className="min-h-[calc(100vh-48px)] bg-white md:min-h-[calc(100vh-80px)]">
-              <div className="border-b border-black/10 bg-[#0f0f0f] px-6 py-8 pr-20 md:px-10">
-                <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[#d7b45a]/85">
-                  {sponsorSectionCopy[revealLanguage].eyebrow}
-                </p>
-                <h2 className="mt-3 max-w-[760px] text-[clamp(2rem,4vw,3.75rem)] font-medium leading-[1.04] tracking-tight text-white">
-                  {sponsorSectionCopy[revealLanguage].title}
-                </h2>
-              </div>
               <motion.div
                 initial={{ opacity: 0, x: 80 }}
                 animate={isSponsorEmbedReady ? { opacity: 1, x: 0 } : { opacity: 0, x: 80 }}
@@ -678,6 +883,59 @@ function App() {
                   title="GoodNews Daily Sponsor A Project"
                 />
               </motion.div>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+
+      {legalModal && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 z-40 flex items-center justify-center bg-black/75 px-4 py-6 backdrop-blur-md"
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 24, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            className="relative flex max-h-[88vh] w-full max-w-[900px] flex-col overflow-hidden border border-white/10 bg-[#151515]/95 text-white shadow-2xl backdrop-blur-[80px]"
+          >
+            <div className="flex items-start justify-between gap-6 border-b border-white/10 px-5 py-5 pr-20 md:px-8 md:py-7">
+              <div>
+                <p className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-[#d7b45a]/80">
+                  {legalCopy[legalModal].eyebrow}
+                </p>
+                <h2 className="mt-2 text-[clamp(1.6rem,3.4vw,2.8rem)] font-medium leading-tight tracking-tight">
+                  {legalCopy[legalModal].title}
+                  <br />
+                  {legalCopy[legalModal].titleJa}
+                </h2>
+                <p className="mt-3 max-w-[620px] text-sm leading-relaxed text-white/45">
+                  {legalCopy[legalModal].updated}
+                </p>
+              </div>
+              <button
+                type="button"
+                aria-label="Close legal popup"
+                onClick={() => setLegalModal(null)}
+                className="absolute right-4 top-4 flex h-10 w-10 shrink-0 items-center justify-center bg-white/10 text-white transition-colors hover:bg-white hover:text-black"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="overflow-y-auto px-5 py-6 md:px-8 md:py-8">
+              <div className="grid gap-5 md:grid-cols-2 md:gap-7">
+                {legalCopy[legalModal].sections.map((section) => (
+                  <div key={section.heading} className="border border-white/10 bg-white/[0.03] p-5">
+                    <h3 className="text-xl font-semibold leading-tight text-white">{section.heading}</h3>
+                    <p className="mt-3 text-[15px] leading-relaxed text-white/68">{section.body}</p>
+                    <div className="mt-5 border-t border-white/10 pt-5">
+                      <h4 className="text-lg font-semibold leading-tight text-white">{section.headingJa}</h4>
+                      <p className="mt-3 text-[15px] leading-relaxed text-white/68">{section.bodyJa}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </motion.div>
         </motion.div>
@@ -731,7 +989,7 @@ function App() {
               className="flex items-end justify-start md:col-span-5 md:col-start-8 md:row-start-2 md:justify-end lg:col-span-4 lg:col-start-9"
             >
               <SplitCta
-                onClick={() => setIsRegisterOpen(true)}
+                onClick={() => setIsAttendanceOpen(true)}
                 label={
                   <span className="block min-w-[140px] overflow-hidden text-left sm:min-w-[170px]">
                     <motion.span
@@ -834,7 +1092,7 @@ function App() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setIsRegisterOpen(true)}
+                  onClick={() => setIsHealingFormOpen(true)}
                   className="mt-5 block bg-white px-6 py-4 font-mono text-xs font-bold uppercase tracking-[-0.01em] text-black transition-colors hover:bg-gray-200"
                 >
                   {healingCopy[revealLanguage].register}
@@ -930,11 +1188,46 @@ function App() {
                     lineHeight: 1.05,
                   }}
                 >
-                  Ready To Score
-                  <br />
-                  Your Winning Season?
+                  <motion.span
+                    key={`footer-title-${attendanceLanguage}`}
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    className="block"
+                  >
+                    {attendanceLanguage === 'en' ? (
+                      <>
+                        Are you Coming?
+                      </>
+                    ) : (
+                      <>ごさんかされますか？</>
+                    )}
+                  </motion.span>
                 </h2>
-                <SplitCta label="START YOUR SEASONS" light />
+                <SplitCta
+                  light
+                  onClick={() => setIsAttendanceOpen(true)}
+                  label={
+                    <span className="block min-w-[150px] overflow-hidden text-left sm:min-w-[180px]">
+                      <motion.span
+                        key={`footer-cta-${attendanceLanguage}`}
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                        className="block"
+                      >
+                        {attendanceLanguage === 'en' ? (
+                          <>
+                            <span className="block text-[14px] leading-none">Yes!</span>
+                            <span className="mt-1 block text-[11px] leading-none">I'm Participating!</span>
+                          </>
+                        ) : (
+                          <span className="block text-[13px] leading-[1.25]">はい、参加します！</span>
+                        )}
+                      </motion.span>
+                    </span>
+                  }
+                />
               </div>
 
               <div
@@ -946,10 +1239,10 @@ function App() {
                 }}
               >
                 <div>
-                  <WisaLogo className="mb-6 h-[clamp(12px,0.7vw,16px)] w-[clamp(75px,4.5vw,100px)]" />
+                  <WisaLogo className="mb-6 h-[clamp(48px,5vw,72px)] w-[clamp(48px,5vw,72px)]" />
                   <p style={{ fontSize: 13, color: 'rgba(255, 255, 255, 0.4)', maxWidth: 220 }}>
-                    Premium football programming, matchday systems, and elite preparation for the world's next
-                    champions.
+                    This is a moment in history. Japan you are called! The GoodNews and the prophetic is arriving!
+                    Make your plans now.
                   </p>
                 </div>
 
@@ -996,15 +1289,25 @@ function App() {
                 }}
               >
                 <p className="font-mono" style={{ fontSize: 11, color: 'rgba(255, 255, 255, 0.25)', letterSpacing: '0.1em' }}>
-                  2026 WISA. ALL RIGHTS RESERVED.
+                  2026 GoodNewsWorld All Rights Reserved.
                 </p>
                 <div className="flex gap-6 font-mono" style={{ fontSize: 11, letterSpacing: '0.1em' }}>
-                  <a href="#" style={{ color: 'rgba(255, 255, 255, 0.25)' }}>
+                  <button
+                    type="button"
+                    onClick={() => setLegalModal('privacy')}
+                    className="transition-colors hover:text-white"
+                    style={{ color: 'rgba(255, 255, 255, 0.25)' }}
+                  >
                     PRIVACY
-                  </a>
-                  <a href="#" style={{ color: 'rgba(255, 255, 255, 0.25)' }}>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setLegalModal('terms')}
+                    className="transition-colors hover:text-white"
+                    style={{ color: 'rgba(255, 255, 255, 0.25)' }}
+                  >
                     TERMS
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
