@@ -7,6 +7,7 @@ const FRAME_COUNT = 192;
 const INITIAL_PRELOAD_COUNT = 18;
 const PRELOADER_MIN_VISIBLE_MS = 2600;
 const PRELOADER_DISSOLVE_MS = 900;
+const MOBILE_FRAME_MAX_WIDTH = 767;
 const LOGO_URL = 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/686f096a627f396723165ccf.png';
 const DATE_VENUE_LOGO_URL = 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6995a97ff02fa4d694442b64.webp';
 const GOODNEWS_DAILY_LOGO_URL = 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a203c12b75a113972d5cc41.webp';
@@ -19,8 +20,11 @@ const ZOHO_HEALING_FORM_URL =
 const VENUE_MAP_URL =
   'https://www.google.com/maps/place//data=!4m2!3m1!1s0x6018dd914443816b:0x289a3ef1c6c5b4eb?entry=gemini&utm_source=gemini&utm_campaign=gem-default';
 
-function getFrameSrc(index: number) {
-  return `/frames/frame-${String(index + 1).padStart(4, '0')}.webp`;
+type FrameVariant = 'desktop' | 'mobile';
+
+function getFrameSrc(index: number, variant: FrameVariant) {
+  const directory = variant === 'mobile' ? 'frames-mobile' : 'frames';
+  return `/${directory}/frame-${String(index + 1).padStart(4, '0')}.webp`;
 }
 
 function WisaLogo({ className = '' }: { className?: string }) {
@@ -387,6 +391,8 @@ function App() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const frameImagesRef = useRef<HTMLImageElement[]>([]);
   const loadedFramesRef = useRef<boolean[]>([]);
+  const mobileFrameImagesRef = useRef<HTMLImageElement[]>([]);
+  const mobileLoadedFramesRef = useRef<boolean[]>([]);
   const preloaderStartedAtRef = useRef(Date.now());
   const screen3Ref = useRef<HTMLDivElement | null>(null);
   const sponsorVideoRef = useRef<HTMLDivElement | null>(null);
@@ -415,6 +421,38 @@ function App() {
     typeof window === 'undefined'
       ? ZOHO_HEALING_FORM_URL
       : `${ZOHO_HEALING_FORM_URL}?referrername=${encodeURIComponent(window.location.href.slice(0, 1800))}`;
+
+  const getFrameVariant = (): FrameVariant =>
+    typeof window !== 'undefined' && window.matchMedia(`(max-width: ${MOBILE_FRAME_MAX_WIDTH}px)`).matches
+      ? 'mobile'
+      : 'desktop';
+
+  const getFrameStore = (variant: FrameVariant) =>
+    variant === 'mobile'
+      ? { images: mobileFrameImagesRef.current, loaded: mobileLoadedFramesRef.current }
+      : { images: frameImagesRef.current, loaded: loadedFramesRef.current };
+
+  const loadFrame = (index: number, variant: FrameVariant, markInitialLoad = false) => {
+    const { images, loaded } = getFrameStore(variant);
+    const image = images[index] ?? new Image();
+    image.decoding = 'async';
+    image.onload = () => {
+      loaded[index] = true;
+      if (markInitialLoad && index === 0) {
+        setIsLoaded(true);
+      }
+    };
+
+    images[index] = image;
+    if (!image.src) {
+      image.src = getFrameSrc(index, variant);
+    }
+    if (image.complete && image.naturalWidth) {
+      image.onload?.(new Event('load'));
+    }
+
+    return image;
+  };
 
   useEffect(() => {
     if (!isLoaded || shouldPreviewPreloader) return;
@@ -488,30 +526,10 @@ function App() {
   useEffect(() => {
     let isCancelled = false;
     let preloadTimer = 0;
-
-    const loadFrame = (index: number) => {
-      const image = frameImagesRef.current[index] ?? new Image();
-      image.decoding = 'async';
-      image.onload = () => {
-        loadedFramesRef.current[index] = true;
-        if (!isCancelled && index === 0) {
-          setIsLoaded(true);
-        }
-      };
-
-      frameImagesRef.current[index] = image;
-      if (!image.src) {
-        image.src = getFrameSrc(index);
-      }
-      if (image.complete && image.naturalWidth) {
-        image.onload?.(new Event('load'));
-      }
-
-      return image;
-    };
+    const initialVariant = getFrameVariant();
 
     for (let index = 0; index < INITIAL_PRELOAD_COUNT; index += 1) {
-      loadFrame(index);
+      loadFrame(index, initialVariant, !isCancelled);
     }
 
     let nextPreloadIndex = INITIAL_PRELOAD_COUNT;
@@ -520,7 +538,7 @@ function App() {
 
       const batchEnd = Math.min(nextPreloadIndex + 8, FRAME_COUNT);
       for (let index = nextPreloadIndex; index < batchEnd; index += 1) {
-        loadFrame(index);
+        loadFrame(index, initialVariant);
       }
       nextPreloadIndex = batchEnd;
       preloadTimer = window.setTimeout(preloadNextBatch, 120);
@@ -544,9 +562,11 @@ function App() {
       const context = canvas?.getContext('2d');
       if (!canvas || !context) return;
 
-      const targetImage = frameImagesRef.current[frameIndex];
-      const fallbackImage = frameImagesRef.current.find((_, index) => loadedFramesRef.current[index]);
-      const image = loadedFramesRef.current[frameIndex] ? targetImage : fallbackImage;
+      const variant = getFrameVariant();
+      const { images, loaded } = getFrameStore(variant);
+      const targetImage = loaded[frameIndex] ? images[frameIndex] : loadFrame(frameIndex, variant);
+      const fallbackImage = images.find((_, index) => loaded[index]);
+      const image = loaded[frameIndex] ? targetImage : fallbackImage;
       if (!image?.naturalWidth || !image.naturalHeight) return;
 
       const dpr = window.devicePixelRatio || 1;
