@@ -5,6 +5,8 @@ import ScrollReveal from './components/ScrollReveal';
 
 const FRAME_COUNT = 192;
 const INITIAL_PRELOAD_COUNT = 18;
+const PRELOADER_MIN_VISIBLE_MS = 2600;
+const PRELOADER_DISSOLVE_MS = 900;
 const LOGO_URL = 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/686f096a627f396723165ccf.png';
 const DATE_VENUE_LOGO_URL = 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6995a97ff02fa4d694442b64.webp';
 const GOODNEWS_DAILY_LOGO_URL = 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a203c12b75a113972d5cc41.webp';
@@ -385,10 +387,12 @@ function App() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const frameImagesRef = useRef<HTMLImageElement[]>([]);
   const loadedFramesRef = useRef<boolean[]>([]);
+  const preloaderStartedAtRef = useRef(Date.now());
   const screen3Ref = useRef<HTMLDivElement | null>(null);
   const sponsorVideoRef = useRef<HTMLDivElement | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isPreloaderVisible, setIsPreloaderVisible] = useState(true);
+  const [isPreloaderDismissing, setIsPreloaderDismissing] = useState(false);
   const [isHealingDetailsOpen, setIsHealingDetailsOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [isAttendanceOpen, setIsAttendanceOpen] = useState(false);
@@ -415,8 +419,19 @@ function App() {
   useEffect(() => {
     if (!isLoaded || shouldPreviewPreloader) return;
 
-    const hideTimer = window.setTimeout(() => setIsPreloaderVisible(false), 900);
-    return () => window.clearTimeout(hideTimer);
+    const elapsed = Date.now() - preloaderStartedAtRef.current;
+    const remainingVisibleTime = Math.max(0, PRELOADER_MIN_VISIBLE_MS - elapsed);
+    let hideTimer = 0;
+
+    const dismissTimer = window.setTimeout(() => {
+      setIsPreloaderDismissing(true);
+      hideTimer = window.setTimeout(() => setIsPreloaderVisible(false), PRELOADER_DISSOLVE_MS);
+    }, remainingVisibleTime);
+
+    return () => {
+      window.clearTimeout(dismissTimer);
+      window.clearTimeout(hideTimer);
+    };
   }, [isLoaded, shouldPreviewPreloader]);
 
   useEffect(() => {
@@ -597,7 +612,7 @@ function App() {
       {(isPreloaderVisible || shouldPreviewPreloader) && (
         <div
           className={`fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden bg-[#080806] ${
-            isLoaded && !shouldPreviewPreloader ? 'animate-preloader-dissolve pointer-events-none' : ''
+            isPreloaderDismissing && !shouldPreviewPreloader ? 'animate-preloader-dissolve pointer-events-none' : ''
           }`}
         >
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(215,180,90,0.18)_0%,rgba(22,20,16,0.72)_34%,rgba(0,0,0,0.98)_78%)]" />
