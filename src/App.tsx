@@ -1517,7 +1517,7 @@ function App() {
             </ScrollReveal>
 
             <div className="mt-20 grid grid-cols-1 gap-12 md:grid-cols-12 md:gap-10">
-              <Reveal delay={0.1} className="md:col-span-7">
+              <Reveal delay={0.1} className="md:col-span-12">
                 <div id="healing" className="mb-4 flex scroll-mt-28 items-center gap-3">
                   <img
                     src={HEALING_INSTITUTE_LOGO_URL}
@@ -1539,12 +1539,12 @@ function App() {
                 >
                   {isHealingDetailsOpen ? healingCopy[revealLanguage].readLess : healingCopy[revealLanguage].readMore}
                 </button>
-                <div className="mt-5 max-w-[560px]">
+                <div className="mt-5 max-w-[560px] md:max-w-none">
                   <div className="mb-3 h-px bg-white/10" />
                   <div className="relative">
                     <div
                       ref={healingVideoTrackRef}
-                      className="flex snap-x snap-mandatory gap-2 overflow-x-auto overscroll-x-contain scroll-smooth pb-3 [scrollbar-width:none] md:grid md:grid-cols-2 md:gap-4 md:overflow-visible md:pb-0 [&::-webkit-scrollbar]:hidden"
+                      className="flex snap-x snap-mandatory gap-2 overflow-x-auto overscroll-x-contain scroll-smooth pb-3 [scrollbar-width:none] md:grid md:grid-cols-4 md:gap-4 md:overflow-visible md:pb-0 [&::-webkit-scrollbar]:hidden"
                       onScroll={(event) => {
                         const track = event.currentTarget;
                         let nearestIndex = 0;
