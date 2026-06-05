@@ -1478,26 +1478,8 @@ function App() {
               {revealCopy[revealLanguage]}
             </ScrollReveal>
 
-            <div className="mt-24 grid grid-cols-1 gap-12 md:grid-cols-12 md:gap-10">
-              <Reveal delay={0.1} className="md:col-span-6">
-                <div className="mb-4 flex items-center gap-3">
-                  <img
-                    src={DATE_VENUE_LOGO_URL}
-                    alt=""
-                    className="h-9 w-9 shrink-0 object-contain"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                  <h3 className="text-xl font-medium text-white">{dateVenueCopy[revealLanguage].title}</h3>
-                </div>
-                <p className="text-[15px] leading-relaxed text-white/80">
-                  <span className="block font-semibold text-white">{dateVenueCopy[revealLanguage].date}</span>
-                  <span className="mt-3 block">{dateVenueCopy[revealLanguage].venue}</span>
-                  <span className="mt-3 block">{dateVenueCopy[revealLanguage].address}</span>
-                </p>
-              </Reveal>
-
-              <Reveal delay={0.2} className="md:col-span-6">
+            <div className="mt-20 grid grid-cols-1 gap-12 md:grid-cols-12 md:gap-10">
+              <Reveal delay={0.1} className="md:col-span-7">
                 <div id="healing" className="mb-4 flex scroll-mt-28 items-center gap-3">
                   <img
                     src={HEALING_INSTITUTE_LOGO_URL}
