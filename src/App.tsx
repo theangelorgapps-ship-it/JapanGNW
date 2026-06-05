@@ -354,18 +354,22 @@ const healingCopy = {
 const healingVideos = [
   {
     id: 'hx3cdx22uw',
+    displayTitle: 'Healing is Easy!',
     title: 'URGENT Your HEALING is EASY Prophet Uebert Angel [get.gt] Video',
   },
   {
     id: '18paz3mqxi',
+    displayTitle: 'Chronic Disc Dislocation Healed',
     title: 'HEALING PROPHECY The Power of Jesus Christ demonstrated in London UK uebertangel jesus [get.gt] Video',
   },
   {
     id: 'st9bray66z',
+    displayTitle: 'HIV Healed Live',
     title: 'HEALING HIV is miraculously healed live on TV Jesus is amazing [get.gt] Video',
   },
   {
     id: 'lpje7fwr7g',
+    displayTitle: "Little Girl's Leg Healed",
     title: 'Watch Prophet Angel the man of God stretch forth his hand and heal this little girls leg [get.gt] Video',
   },
 ];
@@ -1569,6 +1573,9 @@ function App() {
                           key={`${video.id}-${index}`}
                           className="min-w-[36%] snap-center overflow-hidden border border-white/10 bg-black/70 shadow-[0_16px_44px_rgba(0,0,0,0.32)] md:min-w-0 md:shadow-[0_24px_80px_rgba(0,0,0,0.35)]"
                         >
+                          <p className="flex min-h-10 items-center border-b border-white/10 px-2 py-2 font-mono text-[9px] font-bold uppercase leading-tight tracking-[0.05em] text-[#d7b45a] md:min-h-11 md:px-3 md:text-[10px]">
+                            {video.displayTitle}
+                          </p>
                           <div className="relative w-full" style={{ paddingTop: '177.78%' }}>
                             <iframe
                               src={`https://fast.wistia.net/embed/iframe/${video.id}?web_component=true&seo=false`}
