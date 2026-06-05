@@ -1543,31 +1543,31 @@ function App() {
                 >
                   {isHealingDetailsOpen ? healingCopy[revealLanguage].readLess : healingCopy[revealLanguage].readMore}
                 </button>
-                <div className="mt-6 max-w-[560px]">
+                <div className="mt-5 max-w-[560px]">
                   <div className="mb-3 flex items-center justify-between gap-3">
                     <div className="h-px flex-1 bg-white/10" />
                     <div className="flex shrink-0 items-center gap-2">
                       <button
                         type="button"
                         onClick={() => goToHealingVideo(activeHealingVideoIndex - 1)}
-                        className="grid h-9 w-9 place-items-center border border-white/20 bg-black/40 text-white transition-colors hover:border-[#d7b45a] hover:text-[#d7b45a]"
+                        className="grid h-8 w-8 place-items-center border border-white/20 bg-black/40 text-white transition-colors hover:border-[#d7b45a] hover:text-[#d7b45a] sm:h-9 sm:w-9"
                         aria-label="Previous healing video"
                       >
-                        <ChevronLeft size={18} strokeWidth={2.2} />
+                        <ChevronLeft size={16} strokeWidth={2.2} />
                       </button>
                       <button
                         type="button"
                         onClick={() => goToHealingVideo(activeHealingVideoIndex + 1)}
-                        className="grid h-9 w-9 place-items-center border border-white/20 bg-black/40 text-white transition-colors hover:border-[#d7b45a] hover:text-[#d7b45a]"
+                        className="grid h-8 w-8 place-items-center border border-white/20 bg-black/40 text-white transition-colors hover:border-[#d7b45a] hover:text-[#d7b45a] sm:h-9 sm:w-9"
                         aria-label="Next healing video"
                       >
-                        <ChevronRight size={18} strokeWidth={2.2} />
+                        <ChevronRight size={16} strokeWidth={2.2} />
                       </button>
                     </div>
                   </div>
                   <div
                     ref={healingVideoTrackRef}
-                    className="flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain scroll-smooth pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                    className="flex snap-x snap-mandatory gap-2 overflow-x-auto overscroll-x-contain scroll-smooth pb-3 [scrollbar-width:none] sm:gap-4 [&::-webkit-scrollbar]:hidden"
                     onScroll={(event) => {
                       const track = event.currentTarget;
                       let nearestIndex = 0;
@@ -1590,7 +1590,7 @@ function App() {
                     {healingVideos.map((video, index) => (
                       <div
                         key={`${video.id}-${index}`}
-                        className="min-w-full snap-center overflow-hidden border border-white/10 bg-black/70 shadow-[0_24px_80px_rgba(0,0,0,0.35)] sm:min-w-[360px]"
+                        className="min-w-[31%] snap-center overflow-hidden border border-white/10 bg-black/70 shadow-[0_16px_44px_rgba(0,0,0,0.32)] sm:min-w-[360px] sm:shadow-[0_24px_80px_rgba(0,0,0,0.35)]"
                       >
                         <div className="relative w-full" style={{ paddingTop: '177.78%' }}>
                           <iframe
