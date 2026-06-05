@@ -1,15 +1,17 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { motion, useScroll, useTransform } from 'motion/react';
-import { ArrowRight, X } from 'lucide-react';
+import { motion, useMotionValueEvent, useScroll, useTransform } from 'motion/react';
+import { ArrowRight, ArrowUp, X } from 'lucide-react';
 import ScrollReveal from './components/ScrollReveal';
 
-const FRAME_COUNT = 192;
+const DESKTOP_FRAME_COUNT = 192;
+const MOBILE_FRAME_COUNT = 361;
 const INITIAL_PRELOAD_COUNT = 18;
 const PRELOADER_MIN_VISIBLE_MS = 2600;
 const PRELOADER_DISSOLVE_MS = 900;
 const MOBILE_FRAME_MAX_WIDTH = 767;
 const LOGO_URL = 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/686f096a627f396723165ccf.png';
 const DATE_VENUE_LOGO_URL = 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6995a97ff02fa4d694442b64.webp';
+const HEALING_INSTITUTE_LOGO_URL = 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/697cfce550158bec52c80442.png';
 const GOODNEWS_DAILY_LOGO_URL = 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a203c12b75a113972d5cc41.webp';
 const WISTIA_PLAYER_URL = 'https://fast.wistia.net/player.js';
 const SPONSOR_WISTIA_URL = 'https://fast.wistia.net/embed/iframe/l9da91olq5?web_component=true&seo=false';
@@ -25,6 +27,16 @@ type FrameVariant = 'desktop' | 'mobile';
 function getFrameSrc(index: number, variant: FrameVariant) {
   const directory = variant === 'mobile' ? 'frames-mobile' : 'frames';
   return `/${directory}/frame-${String(index + 1).padStart(4, '0')}.webp`;
+}
+
+function getFrameCount(variant: FrameVariant) {
+  return variant === 'mobile' ? MOBILE_FRAME_COUNT : DESKTOP_FRAME_COUNT;
+}
+
+function smoothScrollToHash(hash: string) {
+  const target = document.querySelector(hash);
+  if (!target) return;
+  target.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function WisaLogo({ className = '' }: { className?: string }) {
@@ -137,19 +149,22 @@ function SplitCta({
       onClick={onClick}
       onMouseEnter={bumpCycle}
       onMouseLeave={bumpCycle}
-      className={`group flex max-w-full cursor-pointer items-stretch gap-1 border-0 bg-transparent p-0 ${className}`}
+      className={`group flex max-w-full cursor-pointer items-stretch gap-0 border-0 bg-transparent p-0 sm:gap-1 ${className}`}
     >
       <span
-        className={`flex min-w-0 items-center px-4 py-3 font-mono text-[10px] font-bold tracking-[-0.01em] transition-colors sm:px-6 sm:py-4 sm:text-[11px] ${
+        className={`flex min-w-0 flex-1 items-center justify-between gap-4 px-5 py-4 font-mono text-[10px] font-bold tracking-[-0.01em] transition-colors sm:flex-none sm:justify-start sm:px-6 sm:py-4 sm:text-[11px] ${
           light
             ? 'bg-white text-black hover:bg-gray-200'
-            : 'bg-white/8 text-white/90 backdrop-blur-[80px] group-hover:bg-white group-hover:text-black'
+            : 'bg-white/12 text-white/92 backdrop-blur-[80px] group-hover:bg-white group-hover:text-black'
         }`}
       >
         {label}
+        <span className="sm:hidden">
+          <ArrowRight className="h-5 w-5" strokeWidth={1.75} />
+        </span>
       </span>
       <span
-        className={`flex items-center justify-center px-4 transition-colors sm:px-5 ${
+        className={`hidden items-center justify-center px-4 transition-colors sm:flex sm:px-5 ${
           light
             ? 'bg-white text-black hover:bg-gray-200'
             : 'bg-white/8 text-white/90 backdrop-blur-[80px] group-hover:bg-white group-hover:text-black'
@@ -194,34 +209,72 @@ function LanguageToggle({
   );
 }
 
-const footerColumns = [
-  {
-    title: 'MENU',
-    links: [
-      ['Home', '#home'],
-      ['About', '#about'],
-      ['Contact', '#contact'],
+const footerCopy = {
+  en: {
+    intro:
+      'This is a moment in history. Japan you are called! The GoodNews and the prophetic is arriving! Make your plans now.',
+    columns: [
+      {
+        title: 'MENU',
+        links: [
+          ['Home', '#home'],
+          ['About', '#about'],
+          ['Contact', '#contact'],
+        ],
+      },
+      {
+        title: 'CONTACT',
+        links: [
+          ['Call Center', null],
+          ['🇺🇸 +1 448 877 0344', 'tel:+14488770344'],
+          ['🇬🇧 +44 1244 727242', 'tel:+441244727242'],
+          ['🇿🇼 +263 8677 211 645', 'tel:+2638677211645'],
+          ['🇿🇦 +27 872 654 913', 'tel:+27872654913'],
+        ],
+      },
+      {
+        title: 'CONNECT',
+        links: [
+          ['Instagram', 'https://www.instagram.com/goodnewsworldofficial/'],
+          ['YouTube', 'https://www.youtube.com/@UebertangelGNW'],
+          ['Facebook', 'https://www.facebook.com/uebertangelextra'],
+        ],
+      },
     ],
   },
-  {
-    title: 'CONTACT',
-    links: [
-      ['Call Center', null],
-      ['🇺🇸 +1 448 877 0344', 'tel:+14488770344'],
-      ['🇬🇧 +44 1244 727242', 'tel:+441244727242'],
-      ['🇿🇼 +263 8677 211 645', 'tel:+2638677211645'],
-      ['🇿🇦 +27 872 654 913', 'tel:+27872654913'],
+  ja: {
+    intro:
+      'これは歴史的な瞬間です。日本よ、あなたは召されています！GoodNewsと預言的な働きが到来します。今こそ準備をしてください。',
+    columns: [
+      {
+        title: 'メニュー',
+        links: [
+          ['ホーム', '#home'],
+          ['概要', '#about'],
+          ['連絡先', '#contact'],
+        ],
+      },
+      {
+        title: '連絡先',
+        links: [
+          ['コールセンター', null],
+          ['🇺🇸 +1 448 877 0344', 'tel:+14488770344'],
+          ['🇬🇧 +44 1244 727242', 'tel:+441244727242'],
+          ['🇿🇼 +263 8677 211 645', 'tel:+2638677211645'],
+          ['🇿🇦 +27 872 654 913', 'tel:+27872654913'],
+        ],
+      },
+      {
+        title: 'つながる',
+        links: [
+          ['Instagram', 'https://www.instagram.com/goodnewsworldofficial/'],
+          ['YouTube', 'https://www.youtube.com/@UebertangelGNW'],
+          ['Facebook', 'https://www.facebook.com/uebertangelextra'],
+        ],
+      },
     ],
   },
-  {
-    title: 'CONNECT',
-    links: [
-      ['Instagram @Goodnewsworldofficial', 'https://www.instagram.com/goodnewsworldofficial/'],
-      ['YouTube @UebertangelGNW', 'https://www.youtube.com/@UebertangelGNW'],
-      ['Facebook @uebertangelextra', 'https://www.facebook.com/uebertangelextra'],
-    ],
-  },
-];
+};
 
 const revealCopy = {
   en: `GOODNEWS HAS ARRIVED for the country of JAPAN 🇯🇵. The long awaited arrival of God’s mighty biological mouthpiece, Prophet Uebert Angel, is here! Japan your changing of season is upon you.`,
@@ -396,6 +449,7 @@ function App() {
   const preloaderStartedAtRef = useRef(Date.now());
   const screen3Ref = useRef<HTMLDivElement | null>(null);
   const sponsorVideoRef = useRef<HTMLDivElement | null>(null);
+  const aboutMenuRef = useRef<HTMLDivElement | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isPreloaderVisible, setIsPreloaderVisible] = useState(true);
   const [isPreloaderDismissing, setIsPreloaderDismissing] = useState(false);
@@ -407,10 +461,29 @@ function App() {
   const [legalModal, setLegalModal] = useState<'privacy' | 'terms' | null>(null);
   const [isSponsorEmbedReady, setIsSponsorEmbedReady] = useState(false);
   const [isSharedLanguageVisible, setIsSharedLanguageVisible] = useState(true);
+  const [isBackToTopVisible, setIsBackToTopVisible] = useState(false);
+  const [isAboutLanguageVisible, setIsAboutLanguageVisible] = useState(false);
+  const [isAboutMenuOpen, setIsAboutMenuOpen] = useState(false);
   const [revealLanguage, setRevealLanguage] = useState<'en' | 'ja'>('en');
   const [attendanceLanguage, setAttendanceLanguage] = useState<'en' | 'ja'>('en');
   const { scrollY } = useScroll();
   const headerY = useTransform(scrollY, [0, 500, 800], [0, 0, -150]);
+  const updateAboutLanguageVisibility = (latestScrollY = typeof window !== 'undefined' ? window.scrollY : 0) => {
+    if (typeof window === 'undefined') return;
+
+    const about = document.querySelector('#about');
+    const rect = about?.getBoundingClientRect();
+    if (!rect) {
+      setIsAboutLanguageVisible(false);
+      return;
+    }
+
+    const absoluteTop = latestScrollY + rect.top;
+    const absoluteBottom = absoluteTop + rect.height;
+    setIsAboutLanguageVisible(
+      latestScrollY >= absoluteTop - window.innerHeight && latestScrollY <= absoluteBottom - 120,
+    );
+  };
   const shouldPreviewPreloader =
     typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('preloader');
   const attendanceFormUrl =
@@ -509,6 +582,56 @@ function App() {
   }, [isSponsorOpen]);
 
   useEffect(() => {
+    if (!isAboutMenuOpen) return;
+
+    const closeOnOutsideClick = (event: MouseEvent | TouchEvent) => {
+      const target = event.target;
+      if (!(target instanceof Node) || aboutMenuRef.current?.contains(target)) return;
+      setIsAboutMenuOpen(false);
+    };
+
+    document.addEventListener('mousedown', closeOnOutsideClick);
+    document.addEventListener('touchstart', closeOnOutsideClick);
+
+    return () => {
+      document.removeEventListener('mousedown', closeOnOutsideClick);
+      document.removeEventListener('touchstart', closeOnOutsideClick);
+    };
+  }, [isAboutMenuOpen]);
+
+  useEffect(() => {
+    const updateBackToTop = () => {
+      setIsBackToTopVisible(window.scrollY > window.innerHeight * 0.92);
+    };
+
+    updateBackToTop();
+    window.addEventListener('scroll', updateBackToTop, { passive: true });
+    window.addEventListener('resize', updateBackToTop);
+
+    return () => {
+      window.removeEventListener('scroll', updateBackToTop);
+      window.removeEventListener('resize', updateBackToTop);
+    };
+  }, []);
+
+  useMotionValueEvent(scrollY, 'change', (latest) => {
+    updateAboutLanguageVisibility(latest);
+  });
+
+  useEffect(() => {
+    const handleResize = () => updateAboutLanguageVisibility();
+    const handleScroll = () => updateAboutLanguageVisibility();
+    updateAboutLanguageVisibility();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
     const target = sponsorVideoRef.current;
     if (!target) return;
 
@@ -527,21 +650,22 @@ function App() {
     let isCancelled = false;
     let preloadTimer = 0;
     const initialVariant = getFrameVariant();
+    const initialFrameCount = getFrameCount(initialVariant);
 
-    for (let index = 0; index < INITIAL_PRELOAD_COUNT; index += 1) {
+    for (let index = 0; index < Math.min(INITIAL_PRELOAD_COUNT, initialFrameCount); index += 1) {
       loadFrame(index, initialVariant, !isCancelled);
     }
 
     let nextPreloadIndex = INITIAL_PRELOAD_COUNT;
     const preloadNextBatch = () => {
-      if (isCancelled || nextPreloadIndex >= FRAME_COUNT) return;
+      if (isCancelled || nextPreloadIndex >= initialFrameCount) return;
 
-      const batchEnd = Math.min(nextPreloadIndex + 8, FRAME_COUNT);
+      const batchEnd = Math.min(nextPreloadIndex + 10, initialFrameCount);
       for (let index = nextPreloadIndex; index < batchEnd; index += 1) {
         loadFrame(index, initialVariant);
       }
       nextPreloadIndex = batchEnd;
-      preloadTimer = window.setTimeout(preloadNextBatch, 120);
+      preloadTimer = window.setTimeout(preloadNextBatch, initialVariant === 'mobile' ? 90 : 120);
     };
 
     preloadTimer = window.setTimeout(preloadNextBatch, 250);
@@ -607,7 +731,9 @@ function App() {
       const absoluteTop = window.scrollY + rect.top;
       const stopScroll = Math.max(1, absoluteTop - window.innerHeight * 0.2);
       const scrollFraction = Math.max(0, Math.min(1, window.scrollY / stopScroll));
-      const frameIndex = Math.min(FRAME_COUNT - 1, Math.round(scrollFraction * (FRAME_COUNT - 1)));
+      const variant = getFrameVariant();
+      const frameCount = getFrameCount(variant);
+      const frameIndex = Math.min(frameCount - 1, Math.round(scrollFraction * (frameCount - 1)));
       drawFrame(frameIndex);
     };
 
@@ -684,34 +810,99 @@ function App() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="fixed left-1/2 top-3 z-20 w-[min(72vw,390px)] -translate-x-1/2 pointer-events-auto sm:top-4 md:w-[min(52vw,440px)]"
+        className="fixed left-1/2 top-3 z-20 w-auto max-w-[calc(100vw-24px)] -translate-x-1/2 pointer-events-auto sm:top-4"
       >
         <nav className="flex items-center rounded-full border border-white/15 bg-[#1A1A1A]/58 px-2 py-1.5 shadow-xl shadow-black/25 backdrop-blur-[80px] sm:px-2.5 sm:py-2 md:px-3">
           <a
             href="#home"
             aria-label="GoodNews Japan home"
+            onClick={(event) => {
+              event.preventDefault();
+              smoothScrollToHash('#home');
+              setIsAboutMenuOpen(false);
+            }}
             className="flex h-7 w-8 shrink-0 items-center justify-center sm:h-8 sm:w-10 md:h-9 md:w-11"
           >
             <WisaLogo className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8" />
           </a>
           <div className="mx-1.5 h-6 w-px bg-white/18 sm:mx-2 sm:h-7" />
-          <div className="grid min-w-0 flex-1 grid-cols-3 items-center gap-0 text-center font-sans text-[11px] font-semibold tracking-[-0.01em] text-white/84 sm:text-xs md:text-[13px]">
-            {[
-              ['Home', '#home'],
-              ['About', '#about'],
-              ['Contact', '#contact'],
-            ].map(([label, href]) => (
-              <a
-                key={label}
-                href={href}
-                className="rounded-full px-0.5 py-1.5 transition-colors hover:bg-white/10 hover:text-white sm:px-1"
+          <div className="flex min-w-0 items-center gap-2 text-center font-sans text-[11px] font-semibold tracking-[-0.01em] text-white/84 sm:gap-3 sm:text-xs md:text-[13px]">
+            <div
+              ref={aboutMenuRef}
+              className="relative"
+              onMouseEnter={() => setIsAboutMenuOpen(true)}
+            >
+              <button
+                type="button"
+                aria-expanded={isAboutMenuOpen}
+                aria-haspopup="menu"
+                onClick={() => setIsAboutMenuOpen(true)}
+                onFocus={() => setIsAboutMenuOpen(true)}
+                className="rounded-full px-2 py-1.5 transition-colors hover:bg-white/10 hover:text-white sm:px-2.5"
               >
-                {label}
-              </a>
-            ))}
+                About / 概要
+              </button>
+              <motion.div
+                initial={false}
+                animate={
+                  isAboutMenuOpen
+                    ? { opacity: 1, y: 0, scale: 1 }
+                    : { opacity: 0, y: -6, scale: 0.98 }
+                }
+                transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+                className={`absolute left-1/2 top-[calc(100%+14px)] z-30 w-[300px] -translate-x-1/2 border border-white/12 bg-[#151515]/88 p-2 text-left shadow-2xl shadow-black/35 backdrop-blur-[80px] ${
+                  isAboutMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'
+                }`}
+                role="menu"
+              >
+                {[
+                  ['Healing is Easy / 回復は簡単だ。', '#healing', HEALING_INSTITUTE_LOGO_URL],
+                  ['GoodNewsDaily / グッドニュースデイリー', '#goodnews-daily', GOODNEWS_DAILY_LOGO_URL],
+                ].map(([label, href, icon]) => (
+                  <button
+                    key={label}
+                    type="button"
+                    role="menuitem"
+                    onClick={() => {
+                      smoothScrollToHash(href);
+                    }}
+                    className="flex w-full items-center gap-3 px-3 py-3 text-left text-[12px] font-semibold text-white/76 transition-colors hover:bg-white/10 hover:text-white"
+                  >
+                    <img src={icon} alt="" className="h-7 w-7 shrink-0 object-contain" loading="lazy" decoding="async" />
+                    <span>{label}</span>
+                  </button>
+                ))}
+              </motion.div>
+            </div>
+
+            <a
+              href="#contact"
+              onClick={(event) => {
+                event.preventDefault();
+                smoothScrollToHash('#contact');
+                setIsAboutMenuOpen(false);
+              }}
+              className="rounded-full px-2 py-1.5 transition-colors hover:bg-white/10 hover:text-white sm:px-2.5"
+            >
+              Contact / 連絡先
+            </a>
           </div>
         </nav>
       </motion.header>
+
+      <motion.button
+        type="button"
+        aria-label="Back to top"
+        onClick={() => smoothScrollToHash('#home')}
+        initial={false}
+        animate={isBackToTopVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
+        transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+        className={`fixed bottom-5 right-5 z-30 flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-[#1A1A1A]/70 text-white shadow-xl shadow-black/30 backdrop-blur-[80px] transition-colors hover:bg-white hover:text-black md:bottom-7 md:right-7 ${
+          isBackToTopVisible ? 'pointer-events-auto' : 'pointer-events-none'
+        }`}
+      >
+        <ArrowUp className="h-5 w-5" strokeWidth={1.8} />
+      </motion.button>
 
       {isRegisterOpen && (
         <motion.div
@@ -979,12 +1170,12 @@ function App() {
       <main className="relative z-10 pointer-events-none">
         <section
           id="home"
-          className="mx-auto flex min-h-[100svh] w-[90%] flex-col pb-8 pt-28 md:h-screen md:pb-12 md:pt-28 lg:pb-16 lg:pt-32"
+          className="mx-auto flex min-h-[100svh] w-[90%] flex-col pb-7 pt-24 md:h-screen md:pb-12 md:pt-28 lg:pb-16 lg:pt-32"
         >
-          <div className="flex flex-1 w-full flex-col justify-end gap-y-5 pointer-events-auto md:grid md:grid-cols-12 md:grid-rows-[1fr_auto] md:gap-x-8 md:gap-y-0">
+          <div className="flex flex-1 w-full flex-col justify-end gap-y-4 pointer-events-auto md:grid md:grid-cols-12 md:grid-rows-[1fr_auto] md:gap-x-8 md:gap-y-0">
             <Reveal delay={0.2} className="flex items-end md:col-span-7 md:col-start-1 md:row-start-2 lg:col-span-8">
               <div>
-                <p className="mb-3 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-white/70 sm:text-xs">
+                <p className="mb-2 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-white/70 sm:text-xs md:mb-3">
                   8月14～16日/August 14-16
                 </p>
                 <h1 className="text-[clamp(2.15rem,10vw,5rem)] font-medium leading-[1.05] tracking-tight text-white md:whitespace-nowrap md:text-[clamp(2.5rem,6vw,5rem)]">
@@ -996,12 +1187,15 @@ function App() {
                   href={VENUE_MAP_URL}
                   target="_blank"
                   rel="noreferrer"
-                  className="mt-4 block max-w-[620px] text-[12px] font-medium leading-[1.45] text-white/70 underline-offset-4 transition-colors hover:text-white hover:underline sm:text-[13px] md:max-w-[470px] lg:max-w-[560px]"
+                  className="mt-3 block max-w-[620px] text-[12px] font-medium leading-[1.45] text-white/70 underline-offset-4 transition-colors hover:text-white hover:underline sm:text-[13px] md:mt-4 md:max-w-[470px] lg:max-w-[560px]"
                 >
-                  会場：所沢市民文化センター ミューズ マーキーホール, 〒359-0042 埼玉県所沢市並木1-9-1
-                  <br />
-                  Venue: Tokorozawa Civic Cultural Centre MUSE, Marquee Hall, 1-9-1 Namiki, Tokorozawa, Saitama
-                  359-0042
+                  <span className="md:hidden">Tokorozawa MUSE, Marquee Hall</span>
+                  <span className="hidden md:inline">
+                    会場：所沢市民文化センター ミューズ マーキーホール, 〒359-0042 埼玉県所沢市並木1-9-1
+                    <br />
+                    Venue: Tokorozawa Civic Cultural Centre MUSE, Marquee Hall, 1-9-1 Namiki, Tokorozawa, Saitama
+                    359-0042
+                  </span>
                 </a>
               </div>
             </Reveal>
@@ -1010,12 +1204,25 @@ function App() {
               delay={0.3}
               className="flex flex-col items-start justify-center text-left md:col-span-5 md:col-start-8 md:row-start-1 md:items-end md:text-right"
             >
-              <p className="relative max-w-[500px] text-[clamp(0.95rem,3.8vw,1.375rem)] font-bold leading-[1.28] text-white md:text-[clamp(1rem,1.35vw,1.25rem)] md:leading-[1.32]">
-                世界的預言の器 来日決定/The Prophet to the Last Dispensation is coming to Japan!
-                <br />
-                <span>癒しと奇跡のイベント！</span>
-                <br />
-                <span>スピーカー：ユーバート・エンジェル師</span>
+              <p className="relative max-w-[500px] text-[clamp(0.68rem,2.65vw,0.95rem)] font-semibold leading-[1.24] text-white sm:text-[clamp(0.86rem,3.1vw,1.15rem)] md:text-[clamp(1rem,1.35vw,1.25rem)] md:font-bold md:leading-[1.32]">
+                <span className="md:hidden">
+                  世界的預言の器 来日決定/
+                  <br />
+                  The Prophet to the Last Dispensation is coming to Japan!
+                  <br />
+                  癒しと奇跡のイベント！
+                  <br />
+                  スピーカー：ユーバート・エンジェル師
+                </span>
+                <span className="hidden md:inline">
+                  世界的預言の器 来日決定/
+                  <br />
+                  The Prophet to the Last Dispensation is coming to Japan!
+                  <br />
+                  <span>癒しと奇跡のイベント！</span>
+                  <br />
+                  <span>スピーカー：ユーバート・エンジェル師</span>
+                </span>
               </p>
             </Reveal>
 
@@ -1025,8 +1232,9 @@ function App() {
             >
               <SplitCta
                 onClick={() => setIsAttendanceOpen(true)}
+                className="w-full max-w-[340px] sm:w-auto sm:max-w-none"
                 label={
-                  <span className="block min-w-[140px] overflow-hidden text-left sm:min-w-[170px]">
+                  <span className="block min-w-0 overflow-hidden text-left sm:min-w-[170px]">
                     <motion.span
                       key={attendanceLanguage}
                       initial={{ opacity: 0, y: 12 }}
@@ -1035,16 +1243,11 @@ function App() {
                       className="block"
                     >
                       {attendanceLanguage === 'en' ? (
-                        <>
-                          <span className="block text-[9px] uppercase tracking-[0.14em] opacity-70">
-                            Let Us Know
-                          </span>
-                          <span className="mt-1 block text-[13px] leading-none tracking-[0.02em] sm:text-[15px]">
-                            You're Coming
-                          </span>
-                        </>
+                        <span className="block whitespace-nowrap text-[11px] leading-none tracking-[0.02em] sm:text-[14px]">
+                          Let Us Know You're Coming
+                        </span>
                       ) : (
-                        <span className="block text-[11px] leading-[1.25] tracking-[0.02em] sm:text-[13px]">
+                        <span className="block whitespace-nowrap text-[10px] leading-none tracking-[0.01em] sm:text-[13px]">
                           お越しになる際はお知らせください。
                         </span>
                       )}
@@ -1059,15 +1262,29 @@ function App() {
         <div className="h-[200px] w-full" />
 
         <div id="about" className="relative pointer-events-auto">
-          <LanguageToggle
-            revealLanguage={revealLanguage}
-            setRevealLanguage={setRevealLanguage}
-            className={`sticky top-24 z-10 mb-8 ml-[5%] transition-opacity duration-500 md:top-28 lg:top-32 ${
-              isSharedLanguageVisible ? 'opacity-100' : 'pointer-events-none opacity-0'
-            }`}
+          <div
+            className="pointer-events-none absolute inset-x-0 -top-[24vh] -bottom-[18vh]"
+            style={{
+              background:
+                'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.34) 26%, rgba(0,0,0,0.4) 72%, rgba(0,0,0,0) 100%)',
+            }}
           />
+          <motion.div
+            initial={false}
+            animate={
+              isAboutLanguageVisible && isSharedLanguageVisible
+                ? { opacity: 1, y: 0 }
+                : { opacity: 0, y: 28 }
+            }
+            transition={{ duration: 0.48, ease: [0.16, 1, 0.3, 1] }}
+            className={`fixed bottom-6 left-1/2 z-30 -translate-x-1/2 md:bottom-8 ${
+              isAboutLanguageVisible && isSharedLanguageVisible ? 'pointer-events-auto' : 'pointer-events-none'
+            }`}
+          >
+            <LanguageToggle revealLanguage={revealLanguage} setRevealLanguage={setRevealLanguage} />
+          </motion.div>
 
-        <section className="mx-auto flex min-h-screen w-[90%] flex-col justify-center py-8 pointer-events-auto md:py-12 lg:py-16">
+        <section className="relative mx-auto flex min-h-screen w-[90%] flex-col justify-center py-8 pointer-events-auto md:py-12 lg:py-16">
           <div className="w-full max-w-[1200px]">
             <ScrollReveal
               key={revealLanguage}
@@ -1104,9 +1321,9 @@ function App() {
               </Reveal>
 
               <Reveal delay={0.2} className="md:col-span-6">
-                <div className="mb-4 flex items-center gap-3">
+                <div id="healing" className="mb-4 flex scroll-mt-28 items-center gap-3">
                   <img
-                    src="https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/697cfce550158bec52c80442.png"
+                    src={HEALING_INSTITUTE_LOGO_URL}
                     alt=""
                     className="h-9 w-9 shrink-0 object-contain"
                     loading="lazy"
@@ -1139,10 +1356,10 @@ function App() {
 
         <div className="h-12 w-full md:h-16" />
 
-        <section className="mx-auto flex min-h-[90vh] w-[90%] flex-col justify-center pb-16 pt-8 pointer-events-auto md:pt-10">
+        <section id="goodnews-daily" className="mx-auto flex min-h-[90vh] w-[90%] scroll-mt-28 flex-col justify-center pb-16 pt-8 pointer-events-auto md:pt-10">
           <div className="grid w-full grid-cols-1 items-center gap-10 border-y border-white/10 py-12 md:grid-cols-12 md:gap-10 lg:py-14">
             <Reveal className="md:col-span-6">
-              <p className="mb-4 font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-[#d7b45a]/80">
+              <p className="mb-4 font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-[#f0d794] drop-shadow-[0_2px_10px_rgba(0,0,0,0.75)]">
                 <img
                   src={GOODNEWS_DAILY_LOGO_URL}
                   alt="GoodNews Daily"
@@ -1152,7 +1369,7 @@ function App() {
                 />
                 {sponsorSectionCopy[revealLanguage].eyebrow}
               </p>
-              <h2 className="max-w-[620px] text-[clamp(2rem,4vw,3.85rem)] font-medium leading-[1.03] tracking-tight text-white">
+              <h2 className="max-w-[620px] text-[clamp(2rem,4vw,3.85rem)] font-medium leading-[1.03] tracking-tight text-white drop-shadow-[0_4px_18px_rgba(0,0,0,0.82)]">
                 {sponsorSectionCopy[revealLanguage].title}
               </h2>
               <div
@@ -1164,7 +1381,6 @@ function App() {
                     src={SPONSOR_WISTIA_URL}
                     title="Project Japan sponsor video"
                     allow="autoplay; fullscreen"
-                    allowTransparency
                     frameBorder="0"
                     scrolling="no"
                     className="wistia_embed absolute left-0 top-0 h-full w-full"
@@ -1176,7 +1392,7 @@ function App() {
               </div>
             </Reveal>
             <Reveal delay={0.15} className="md:col-span-6">
-              <p className="max-w-[560px] text-[15px] leading-[1.65] text-white/75 md:text-[16px]">
+              <p className="max-w-[560px] text-[15px] leading-[1.65] text-white/90 drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)] md:text-[16px]">
                 {sponsorSectionCopy[revealLanguage].body}
               </p>
               <button
@@ -1223,66 +1439,62 @@ function App() {
                     lineHeight: 1.05,
                   }}
                 >
-                  <motion.span
-                    key={`footer-title-${attendanceLanguage}`}
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                    className="block"
-                  >
-                    {attendanceLanguage === 'en' ? (
-                      <>
-                        Are you Coming?
-                      </>
-                    ) : (
-                      <>ごさんかされますか？</>
-                    )}
-                  </motion.span>
+	                  <motion.span
+	                    key={`footer-title-${revealLanguage}`}
+	                    initial={{ opacity: 0, y: 16 }}
+	                    animate={{ opacity: 1, y: 0 }}
+	                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+	                    className="block"
+	                  >
+	                    {revealLanguage === 'en' ? (
+	                      <>
+	                        Are you Coming?
+	                      </>
+	                    ) : (
+	                      <>ご参加されますか？</>
+	                    )}
+	                  </motion.span>
                 </h2>
                 <SplitCta
                   light
                   onClick={() => setIsAttendanceOpen(true)}
                   label={
-                    <span className="block min-w-[150px] overflow-hidden text-left sm:min-w-[180px]">
-                      <motion.span
-                        key={`footer-cta-${attendanceLanguage}`}
-                        initial={{ opacity: 0, y: 12 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                        className="block"
-                      >
-                        {attendanceLanguage === 'en' ? (
-                          <>
-                            <span className="block text-[14px] leading-none">Yes!</span>
-                            <span className="mt-1 block text-[11px] leading-none">I'm Participating!</span>
-                          </>
-                        ) : (
-                          <span className="block text-[13px] leading-[1.25]">はい、参加します！</span>
+                    <span className="block min-w-0 overflow-hidden whitespace-nowrap text-left sm:min-w-[180px]">
+	                      <motion.span
+	                        key={`footer-cta-${revealLanguage}`}
+	                        initial={{ opacity: 0, y: 12 }}
+	                        animate={{ opacity: 1, y: 0 }}
+	                        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+	                        className="block"
+	                      >
+	                        {revealLanguage === 'en' ? (
+	                          <span className="block whitespace-nowrap text-[13px] leading-none">Yes! I'm Participating!</span>
+	                        ) : (
+	                          <span className="block text-[13px] leading-[1.25]">はい、参加します！</span>
                         )}
                       </motion.span>
                     </span>
                   }
                 />
-              </div>
-
-              <div
-                style={{
-                  display: 'grid',
+	              </div>
+	
+	              <div
+	                style={{
+	                  display: 'grid',
                   gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
                   gap: 'clamp(32px, 3vw, 48px)',
                   paddingTop: 'clamp(48px, 4vw, 64px)',
                 }}
               >
-                <div>
-                  <WisaLogo className="mb-6 h-[clamp(48px,5vw,72px)] w-[clamp(48px,5vw,72px)]" />
-                  <p style={{ fontSize: 13, color: 'rgba(255, 255, 255, 0.4)', maxWidth: 220 }}>
-                    This is a moment in history. Japan you are called! The GoodNews and the prophetic is arriving!
-                    Make your plans now.
-                  </p>
-                </div>
-
-                {footerColumns.map(({ title, links }) => (
-                  <div key={title}>
+	                <div>
+	                  <WisaLogo className="mb-6 h-[clamp(48px,5vw,72px)] w-[clamp(48px,5vw,72px)]" />
+	                  <p style={{ fontSize: 13, color: 'rgba(255, 255, 255, 0.4)', maxWidth: 220 }}>
+	                    {footerCopy[revealLanguage].intro}
+	                  </p>
+	                </div>
+	
+	                {footerCopy[revealLanguage].columns.map(({ title, links }) => (
+	                  <div key={title}>
                     <h3
                       className="mb-5 font-mono"
                       style={{ fontSize: 10, letterSpacing: '0.1em', color: 'rgba(255, 255, 255, 0.3)' }}
@@ -1295,6 +1507,14 @@ function App() {
                           <a
                             key={label}
                             href={href}
+                            onClick={
+                              href.startsWith('#')
+                                ? (event) => {
+                                    event.preventDefault();
+                                    smoothScrollToHash(href);
+                                  }
+                                : undefined
+                            }
                             target={href.startsWith('http') ? '_blank' : undefined}
                             rel={href.startsWith('http') ? 'noreferrer' : undefined}
                             style={{ fontSize: 14, color: 'rgba(255, 255, 255, 0.6)' }}
@@ -1325,6 +1545,8 @@ function App() {
               >
                 <p className="font-mono" style={{ fontSize: 11, color: 'rgba(255, 255, 255, 0.25)', letterSpacing: '0.1em' }}>
                   2026 GoodNewsWorld All Rights Reserved.
+                  <br />
+                  2026 GoodNewsWorld 無断転載を禁じます。
                 </p>
                 <div className="flex gap-6 font-mono" style={{ fontSize: 11, letterSpacing: '0.1em' }}>
                   <button
