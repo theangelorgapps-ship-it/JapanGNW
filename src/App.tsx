@@ -14,8 +14,7 @@ const LOGO_URL = 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6
 const DATE_VENUE_LOGO_URL = 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6995a97ff02fa4d694442b64.webp';
 const HEALING_INSTITUTE_LOGO_URL = 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/697cfce550158bec52c80442.png';
 const GOODNEWS_DAILY_LOGO_URL = 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a203c12b75a113972d5cc41.webp';
-const WISTIA_PLAYER_URL = 'https://fast.wistia.net/player.js';
-const SPONSOR_WISTIA_URL = 'https://fast.wistia.net/embed/iframe/l9da91olq5?web_component=true&seo=false';
+const SPONSOR_VIDEO_URL = 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a20453b2f1efbc072040d12.mp4';
 const ZOHO_ATTENDANCE_FORM_URL =
   'https://forms.zohopublic.eu/rikki/form/LetUsKnowYoureComing/formperma/HXE-JEIrRKpAvUyNGhJ8wQmyaP3L2wKVsRK1zdSJPSo';
 const ZOHO_HEALING_FORM_URL =
@@ -582,15 +581,6 @@ function App() {
 
     return () => window.clearInterval(interval);
   }, []);
-
-  useEffect(() => {
-    if (!isSponsorSectionNear || document.querySelector(`script[src="${WISTIA_PLAYER_URL}"]`)) return;
-
-    const script = document.createElement('script');
-    script.src = WISTIA_PLAYER_URL;
-    script.async = true;
-    document.body.appendChild(script);
-  }, [isSponsorSectionNear]);
 
   useEffect(() => {
     if (!isSponsorOpen) {
@@ -1411,18 +1401,18 @@ function App() {
                 className="mt-8 max-w-[440px] overflow-hidden border border-white/10 bg-black/70 shadow-2xl shadow-black/30"
               >
                 <div className="relative w-full" style={{ paddingTop: '125%' }}>
-                  <iframe
-                    src={isSponsorSectionNear ? SPONSOR_WISTIA_URL : undefined}
-                    title="Project Japan sponsor video"
-                    allow="autoplay; fullscreen"
-                    frameBorder="0"
-                    loading="lazy"
-                    scrolling="no"
-                    className="wistia_embed absolute left-0 top-0 h-full w-full"
-                    name="wistia_embed"
-                    width="100%"
-                    height="100%"
-                  />
+                  {isSponsorSectionNear && (
+                    <video
+                      src={SPONSOR_VIDEO_URL}
+                      title="Project Japan sponsor video"
+                      className="absolute left-0 top-0 h-full w-full object-cover"
+                      autoPlay
+                      muted
+                      defaultMuted
+                      playsInline
+                      preload="metadata"
+                    />
+                  )}
                 </div>
               </div>
             </Reveal>
