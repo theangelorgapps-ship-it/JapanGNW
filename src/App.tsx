@@ -1632,7 +1632,7 @@ function App() {
                 <button
                   type="button"
                   onClick={() => setIsHealingFormOpen(true)}
-                  className="mt-6 block bg-white px-6 py-4 font-mono text-xs font-bold uppercase tracking-[-0.01em] text-black transition-colors hover:bg-gray-200"
+                  className="mt-6 block bg-white px-7 py-5 font-mono text-xs font-bold uppercase tracking-[-0.01em] text-black transition-colors hover:bg-gray-200"
                 >
                   {healingCopy[revealLanguage].register}
                 </button>
