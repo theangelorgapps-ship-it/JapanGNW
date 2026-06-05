@@ -894,6 +894,7 @@ function App() {
                     type="button"
                     role="menuitem"
                     onClick={() => {
+                      setIsAboutMenuOpen(false);
                       smoothScrollToHash(href);
                     }}
                     className="flex w-full items-center gap-3 px-3 py-3 text-left text-[12px] font-semibold text-white/76 transition-colors hover:bg-white/10 hover:text-white"
