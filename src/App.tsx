@@ -14,8 +14,10 @@ const LOGO_URL = 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6
 const DATE_VENUE_LOGO_URL = 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6995a97ff02fa4d694442b64.webp';
 const HEALING_INSTITUTE_LOGO_URL = 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/697cfce550158bec52c80442.png';
 const GOODNEWS_DAILY_LOGO_URL = 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a203c12b75a113972d5cc41.webp';
+const MOBILE_BACKGROUND_WEBM_URL = '/mobile-background.webm';
 const MOBILE_BACKGROUND_VIDEO_URL = '/mobile-background.mp4';
-const SPONSOR_VIDEO_URL = 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a20453b2f1efbc072040d12.mp4';
+const SPONSOR_VIDEO_WEBM_URL = '/sponsor-video.webm';
+const SPONSOR_VIDEO_URL = '/sponsor-video.mp4';
 const ZOHO_ATTENDANCE_FORM_URL =
   'https://forms.zohopublic.eu/rikki/form/LetUsKnowYoureComing/formperma/HXE-JEIrRKpAvUyNGhJ8wQmyaP3L2wKVsRK1zdSJPSo';
 const ZOHO_HEALING_FORM_URL =
@@ -500,6 +502,7 @@ function App() {
   const [isBackToTopVisible, setIsBackToTopVisible] = useState(false);
   const [isAboutLanguageVisible, setIsAboutLanguageVisible] = useState(false);
   const [isAboutMenuOpen, setIsAboutMenuOpen] = useState(false);
+  const [isMobileBackgroundReady, setIsMobileBackgroundReady] = useState(false);
   const [revealLanguage, setRevealLanguage] = useState<'en' | 'ja'>('en');
   const [attendanceLanguage, setAttendanceLanguage] = useState<'en' | 'ja'>('en');
   const { scrollY } = useScroll();
@@ -825,11 +828,33 @@ function App() {
   }, [isLoaded]);
 
   useEffect(() => {
+    const interval = window.setInterval(() => {
+      const video = mobileBackgroundVideoRef.current;
+      if (!video || video.readyState < 1) return;
+      setIsMobileBackgroundReady(true);
+      window.clearInterval(interval);
+    }, 120);
+
+    return () => window.clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (!isMobileBackgroundReady) return;
+
     const video = mobileBackgroundVideoRef.current;
     if (!video) return;
 
     let animationFrame = 0;
     let isAnimating = true;
+
+    const seekVideoTo = (time: number) => {
+      if (typeof video.fastSeek === 'function') {
+        video.fastSeek(time);
+        return;
+      }
+
+      video.currentTime = time;
+    };
 
     const updateTargetTime = () => {
       if (!screen3Ref.current || !video.duration) return;
@@ -849,8 +874,12 @@ function App() {
       const nextTime = smoothedVideoTimeRef.current + (targetTime - smoothedVideoTimeRef.current) * 0.18;
       smoothedVideoTimeRef.current = Math.abs(targetTime - nextTime) < 0.025 ? targetTime : nextTime;
 
-      if (video.readyState >= 1 && !video.seeking && Math.abs(video.currentTime - smoothedVideoTimeRef.current) > 0.025) {
-        video.currentTime = smoothedVideoTimeRef.current;
+      if (
+        video.readyState >= 1 &&
+        !video.seeking &&
+        Math.abs(video.currentTime - smoothedVideoTimeRef.current) > 0.025
+      ) {
+        seekVideoTo(smoothedVideoTimeRef.current);
       }
 
       animationFrame = window.requestAnimationFrame(animateVideo);
@@ -861,7 +890,7 @@ function App() {
       updateTargetTime();
       smoothedVideoTimeRef.current = targetVideoTimeRef.current;
       if (video.readyState >= 1) {
-        video.currentTime = smoothedVideoTimeRef.current;
+        seekVideoTo(smoothedVideoTimeRef.current);
       }
       animationFrame = window.requestAnimationFrame(animateVideo);
     };
@@ -885,7 +914,7 @@ function App() {
       window.removeEventListener('resize', handleScrollOrResize);
       video.removeEventListener('loadedmetadata', startScrub);
     };
-  }, []);
+  }, [isMobileBackgroundReady]);
 
   return (
     <div className="min-h-screen overflow-x-clip bg-black font-sans text-white selection:bg-white selection:text-black">
@@ -940,6 +969,7 @@ function App() {
           src={MOBILE_BACKGROUND_VIDEO_URL}
           poster="/frames-mobile/frame-0001.webp"
           muted
+          onLoadedMetadata={() => setIsMobileBackgroundReady(true)}
           playsInline
           preload="auto"
         />
@@ -1526,14 +1556,16 @@ function App() {
                 <div className="relative w-full" style={{ paddingTop: '125%' }}>
                   {isSponsorSectionNear && (
                     <video
-                      src={SPONSOR_VIDEO_URL}
                       title="Project Japan sponsor video"
                       className="absolute left-0 top-0 h-full w-full object-cover"
                       autoPlay
                       muted
                       playsInline
                       preload="metadata"
-                    />
+                    >
+                      <source src={SPONSOR_VIDEO_WEBM_URL} type="video/webm" />
+                      <source src={SPONSOR_VIDEO_URL} type="video/mp4" />
+                    </video>
                   )}
                 </div>
               </div>
