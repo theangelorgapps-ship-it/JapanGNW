@@ -1565,49 +1565,52 @@ function App() {
                       </button>
                     </div>
                   </div>
-                  <div
-                    ref={healingVideoTrackRef}
-                    className="flex snap-x snap-mandatory gap-2 overflow-x-auto overscroll-x-contain scroll-smooth pb-3 [scrollbar-width:none] sm:gap-4 [&::-webkit-scrollbar]:hidden"
-                    onScroll={(event) => {
-                      const track = event.currentTarget;
-                      let nearestIndex = 0;
-                      let nearestDistance = Number.POSITIVE_INFINITY;
+                  <div className="relative">
+                    <div
+                      ref={healingVideoTrackRef}
+                      className="flex snap-x snap-mandatory gap-2 overflow-x-auto overscroll-x-contain scroll-smooth pb-3 [scrollbar-width:none] sm:gap-4 [&::-webkit-scrollbar]:hidden"
+                      onScroll={(event) => {
+                        const track = event.currentTarget;
+                        let nearestIndex = 0;
+                        let nearestDistance = Number.POSITIVE_INFINITY;
 
-                      Array.from(track.children).forEach((child, index) => {
-                        const slide = child as HTMLElement;
-                        const distance = Math.abs(slide.offsetLeft - track.scrollLeft);
-                        if (distance < nearestDistance) {
-                          nearestDistance = distance;
-                          nearestIndex = index;
-                        }
-                      });
+                        Array.from(track.children).forEach((child, index) => {
+                          const slide = child as HTMLElement;
+                          const distance = Math.abs(slide.offsetLeft - track.scrollLeft);
+                          if (distance < nearestDistance) {
+                            nearestDistance = distance;
+                            nearestIndex = index;
+                          }
+                        });
 
-                      setActiveHealingVideoIndex((currentIndex) =>
-                        currentIndex === nearestIndex ? currentIndex : nearestIndex,
-                      );
-                    }}
-                  >
-                    {healingVideos.map((video, index) => (
-                      <div
-                        key={`${video.id}-${index}`}
-                        className="min-w-[31%] snap-center overflow-hidden border border-white/10 bg-black/70 shadow-[0_16px_44px_rgba(0,0,0,0.32)] sm:min-w-[360px] sm:shadow-[0_24px_80px_rgba(0,0,0,0.35)]"
-                      >
-                        <div className="relative w-full" style={{ paddingTop: '177.78%' }}>
-                          <iframe
-                            src={`https://fast.wistia.net/embed/iframe/${video.id}?web_component=true&seo=false`}
-                            title={video.title}
-                            allow="autoplay; fullscreen"
-                            frameBorder="0"
-                            scrolling="no"
-                            className="wistia_embed absolute left-0 top-0 h-full w-full"
-                            name="wistia_embed"
-                            width="100%"
-                            height="100%"
-                            loading="lazy"
-                          />
+                        setActiveHealingVideoIndex((currentIndex) =>
+                          currentIndex === nearestIndex ? currentIndex : nearestIndex,
+                        );
+                      }}
+                    >
+                      {healingVideos.map((video, index) => (
+                        <div
+                          key={`${video.id}-${index}`}
+                          className="min-w-[31%] snap-center overflow-hidden border border-white/10 bg-black/70 shadow-[0_16px_44px_rgba(0,0,0,0.32)] sm:min-w-[360px] sm:shadow-[0_24px_80px_rgba(0,0,0,0.35)]"
+                        >
+                          <div className="relative w-full" style={{ paddingTop: '177.78%' }}>
+                            <iframe
+                              src={`https://fast.wistia.net/embed/iframe/${video.id}?web_component=true&seo=false`}
+                              title={video.title}
+                              allow="autoplay; fullscreen"
+                              frameBorder="0"
+                              scrolling="no"
+                              className="wistia_embed absolute left-0 top-0 h-full w-full"
+                              name="wistia_embed"
+                              width="100%"
+                              height="100%"
+                              loading="lazy"
+                            />
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-black/80 via-black/35 to-transparent sm:hidden" />
                   </div>
                   <div className="mt-1 flex items-center gap-2">
                     {healingVideos.map((video, index) => (
