@@ -475,6 +475,8 @@ function App() {
   const mobileFrameImagesRef = useRef<HTMLImageElement[]>([]);
   const mobileLoadedFramesRef = useRef<boolean[]>([]);
   const lastDrawnFrameRef = useRef<{ variant: FrameVariant; index: number } | null>(null);
+  const targetFrameRef = useRef(0);
+  const smoothedFrameRef = useRef(0);
   const preloaderStartedAtRef = useRef(Date.now());
   const screen3Ref = useRef<HTMLDivElement | null>(null);
   const sponsorVideoRef = useRef<HTMLDivElement | null>(null);
@@ -717,6 +719,7 @@ function App() {
     if (!isLoaded) return;
 
     let animationFrame = 0;
+    let isAnimating = true;
 
     const drawFrame = (frameIndex: number) => {
       const canvas = canvasRef.current;
@@ -771,7 +774,7 @@ function App() {
       lastDrawnFrameRef.current = { variant, index: imageIndex };
     };
 
-    const updateFrame = () => {
+    const updateTargetFrame = () => {
       if (!screen3Ref.current) return;
       const rect = screen3Ref.current.getBoundingClientRect();
       const absoluteTop = window.scrollY + rect.top;
@@ -779,23 +782,35 @@ function App() {
       const scrollFraction = Math.max(0, Math.min(1, window.scrollY / stopScroll));
       const variant = getFrameVariant();
       const frameCount = getFrameCount(variant);
-      const frameIndex = Math.min(frameCount - 1, Math.round(scrollFraction * (frameCount - 1)));
-      drawFrame(frameIndex);
+      targetFrameRef.current = Math.min(frameCount - 1, scrollFraction * (frameCount - 1));
     };
 
-    const scheduleFrame = () => {
-      window.cancelAnimationFrame(animationFrame);
-      animationFrame = window.requestAnimationFrame(updateFrame);
+    const animateFrame = () => {
+      if (!isAnimating) return;
+
+      updateTargetFrame();
+      const variant = getFrameVariant();
+      const easing = variant === 'mobile' ? 0.18 : 0.24;
+      const targetFrame = targetFrameRef.current;
+      const nextFrame = smoothedFrameRef.current + (targetFrame - smoothedFrameRef.current) * easing;
+      smoothedFrameRef.current = Math.abs(targetFrame - nextFrame) < 0.35 ? targetFrame : nextFrame;
+      drawFrame(Math.round(smoothedFrameRef.current));
+      animationFrame = window.requestAnimationFrame(animateFrame);
     };
 
-    window.addEventListener('scroll', scheduleFrame, { passive: true });
-    window.addEventListener('resize', scheduleFrame);
-    scheduleFrame();
+    const handleScrollOrResize = () => updateTargetFrame();
+
+    window.addEventListener('scroll', handleScrollOrResize, { passive: true });
+    window.addEventListener('resize', handleScrollOrResize);
+    updateTargetFrame();
+    smoothedFrameRef.current = targetFrameRef.current;
+    animationFrame = window.requestAnimationFrame(animateFrame);
 
     return () => {
+      isAnimating = false;
       window.cancelAnimationFrame(animationFrame);
-      window.removeEventListener('scroll', scheduleFrame);
-      window.removeEventListener('resize', scheduleFrame);
+      window.removeEventListener('scroll', handleScrollOrResize);
+      window.removeEventListener('resize', handleScrollOrResize);
     };
   }, [isLoaded]);
 
