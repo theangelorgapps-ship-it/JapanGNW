@@ -535,6 +535,19 @@ function App() {
       ? { images: mobileFrameImagesRef.current, loaded: mobileLoadedFramesRef.current }
       : { images: frameImagesRef.current, loaded: loadedFramesRef.current };
 
+  const findNearestLoadedFrameIndex = (targetIndex: number, loaded: boolean[]) => {
+    if (loaded[targetIndex]) return targetIndex;
+
+    for (let offset = 1; offset < loaded.length; offset += 1) {
+      const previousIndex = targetIndex - offset;
+      const nextIndex = targetIndex + offset;
+      if (previousIndex >= 0 && loaded[previousIndex]) return previousIndex;
+      if (nextIndex < loaded.length && loaded[nextIndex]) return nextIndex;
+    }
+
+    return -1;
+  };
+
   const loadFrame = (index: number, variant: FrameVariant, markInitialLoad = false) => {
     const { images, loaded } = getFrameStore(variant);
     const image = images[index] ?? new Image();
@@ -712,12 +725,14 @@ function App() {
 
       const variant = getFrameVariant();
       const { images, loaded } = getFrameStore(variant);
-      const lastDrawn = lastDrawnFrameRef.current;
-      if (lastDrawn?.variant === variant && lastDrawn.index === frameIndex && loaded[frameIndex]) return;
+      if (!loaded[frameIndex]) {
+        loadFrame(frameIndex, variant);
+      }
 
-      const targetImage = loaded[frameIndex] ? images[frameIndex] : loadFrame(frameIndex, variant);
-      const fallbackImage = images.find((_, index) => loaded[index]);
-      const image = loaded[frameIndex] ? targetImage : fallbackImage;
+      const imageIndex = findNearestLoadedFrameIndex(frameIndex, loaded);
+      if (imageIndex === -1) return;
+
+      const image = images[imageIndex];
       if (!image?.naturalWidth || !image.naturalHeight) return;
 
       const dpr = Math.min(window.devicePixelRatio || 1, variant === 'mobile' ? 1 : 2);
@@ -725,8 +740,11 @@ function App() {
       const height = window.innerHeight;
       const nextWidth = Math.round(width * dpr);
       const nextHeight = Math.round(height * dpr);
+      const isCanvasSized = canvas.width === nextWidth && canvas.height === nextHeight;
+      const lastDrawn = lastDrawnFrameRef.current;
+      if (isCanvasSized && lastDrawn?.variant === variant && lastDrawn.index === imageIndex) return;
 
-      if (canvas.width !== nextWidth || canvas.height !== nextHeight) {
+      if (!isCanvasSized) {
         canvas.width = nextWidth;
         canvas.height = nextHeight;
         canvas.style.width = `${width}px`;
@@ -750,7 +768,7 @@ function App() {
 
       context.clearRect(0, 0, nextWidth, nextHeight);
       context.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, nextWidth, nextHeight);
-      lastDrawnFrameRef.current = { variant, index: frameIndex };
+      lastDrawnFrameRef.current = { variant, index: imageIndex };
     };
 
     const updateFrame = () => {
