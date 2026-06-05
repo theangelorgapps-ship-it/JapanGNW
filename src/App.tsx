@@ -361,10 +361,6 @@ const healingVideos = [
     title: 'HEALING PROPHECY The Power of Jesus Christ demonstrated in London UK uebertangel jesus [get.gt] Video',
   },
   {
-    id: '18paz3mqxi',
-    title: 'HEALING PROPHECY The Power of Jesus Christ demonstrated in London UK uebertangel jesus [get.gt] Video',
-  },
-  {
     id: 'st9bray66z',
     title: 'HEALING HIV is miraculously healed live on TV Jesus is amazing [get.gt] Video',
   },
@@ -1591,7 +1587,7 @@ function App() {
                       {healingVideos.map((video, index) => (
                         <div
                           key={`${video.id}-${index}`}
-                          className="min-w-[31%] snap-center overflow-hidden border border-white/10 bg-black/70 shadow-[0_16px_44px_rgba(0,0,0,0.32)] sm:min-w-[360px] sm:shadow-[0_24px_80px_rgba(0,0,0,0.35)]"
+                          className="min-w-[36%] snap-center overflow-hidden border border-white/10 bg-black/70 shadow-[0_16px_44px_rgba(0,0,0,0.32)] sm:min-w-[360px] sm:shadow-[0_24px_80px_rgba(0,0,0,0.35)]"
                         >
                           <div className="relative w-full" style={{ paddingTop: '177.78%' }}>
                             <iframe
@@ -1610,7 +1606,7 @@ function App() {
                         </div>
                       ))}
                     </div>
-                    <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-black/80 via-black/35 to-transparent sm:hidden" />
+                    <div className="pointer-events-none absolute inset-y-0 right-0 w-28 bg-gradient-to-l from-black/85 via-black/45 to-transparent sm:hidden" />
                   </div>
                   <div className="mt-1 flex items-center gap-2">
                     {healingVideos.map((video, index) => (
