@@ -14,6 +14,7 @@ const LOGO_URL = 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6
 const DATE_VENUE_LOGO_URL = 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6995a97ff02fa4d694442b64.webp';
 const HEALING_INSTITUTE_LOGO_URL = 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/697cfce550158bec52c80442.png';
 const GOODNEWS_DAILY_LOGO_URL = 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a203c12b75a113972d5cc41.webp';
+const MOBILE_BACKGROUND_VIDEO_URL = '/mobile-background.mp4';
 const SPONSOR_VIDEO_URL = 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a20453b2f1efbc072040d12.mp4';
 const ZOHO_ATTENDANCE_FORM_URL =
   'https://forms.zohopublic.eu/rikki/form/LetUsKnowYoureComing/formperma/HXE-JEIrRKpAvUyNGhJ8wQmyaP3L2wKVsRK1zdSJPSo';
@@ -686,6 +687,11 @@ function App() {
     let isCancelled = false;
     let preloadTimer = 0;
     const initialVariant = getFrameVariant();
+    if (initialVariant === 'mobile') {
+      setIsLoaded(true);
+      return;
+    }
+
     const initialFrameCount = getFrameCount(initialVariant);
     const initialPreloadCount = initialVariant === 'mobile' ? 18 : INITIAL_PRELOAD_COUNT;
 
@@ -717,6 +723,7 @@ function App() {
 
   useEffect(() => {
     if (!isLoaded) return;
+    if (getFrameVariant() === 'mobile') return;
 
     let animationFrame = 0;
     let isAnimating = true;
@@ -861,7 +868,17 @@ function App() {
       )}
 
       <div className="fixed inset-0 z-0 bg-black">
-        <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
+        <video
+          className="absolute inset-0 h-full w-full object-cover md:hidden"
+          src={MOBILE_BACKGROUND_VIDEO_URL}
+          poster="/frames-mobile/frame-0001.webp"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+        />
+        <canvas ref={canvasRef} className="absolute inset-0 hidden h-full w-full md:block" />
         <div className="absolute inset-0 bg-black/35" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,transparent_0%,rgba(0,0,0,0.18)_42%,rgba(0,0,0,0.78)_100%)]" />
       </div>
