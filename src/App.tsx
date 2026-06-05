@@ -5,7 +5,7 @@ import ScrollReveal from './components/ScrollReveal';
 
 const DESKTOP_FRAME_COUNT = 192;
 const MOBILE_FRAME_SOURCE_COUNT = 361;
-const MOBILE_FRAME_COUNT = 181;
+const MOBILE_FRAME_COUNT = 1;
 const INITIAL_PRELOAD_COUNT = 18;
 const PRELOADER_MIN_VISIBLE_MS = 2600;
 const PRELOADER_DISSOLVE_MS = 900;
@@ -679,13 +679,14 @@ function App() {
     let nextPreloadIndex = INITIAL_PRELOAD_COUNT;
     const preloadNextBatch = () => {
       if (isCancelled || nextPreloadIndex >= initialFrameCount) return;
+      if (initialVariant === 'mobile') return;
 
-      const batchEnd = Math.min(nextPreloadIndex + (initialVariant === 'mobile' ? 5 : 10), initialFrameCount);
+      const batchEnd = Math.min(nextPreloadIndex + 10, initialFrameCount);
       for (let index = nextPreloadIndex; index < batchEnd; index += 1) {
         loadFrame(index, initialVariant);
       }
       nextPreloadIndex = batchEnd;
-      preloadTimer = window.setTimeout(preloadNextBatch, initialVariant === 'mobile' ? 180 : 120);
+      preloadTimer = window.setTimeout(preloadNextBatch, 120);
     };
 
     preloadTimer = window.setTimeout(preloadNextBatch, 250);
@@ -752,6 +753,10 @@ function App() {
       const stopScroll = Math.max(1, absoluteTop - window.innerHeight * 0.2);
       const scrollFraction = Math.max(0, Math.min(1, window.scrollY / stopScroll));
       const variant = getFrameVariant();
+      if (variant === 'mobile') {
+        drawFrame(0);
+        return;
+      }
       const frameCount = getFrameCount(variant);
       const frameIndex = Math.min(frameCount - 1, Math.round(scrollFraction * (frameCount - 1)));
       drawFrame(frameIndex);
@@ -1408,7 +1413,6 @@ function App() {
                       className="absolute left-0 top-0 h-full w-full object-cover"
                       autoPlay
                       muted
-                      defaultMuted
                       playsInline
                       preload="metadata"
                     />
