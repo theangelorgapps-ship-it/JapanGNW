@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { motion, useMotionValueEvent, useScroll, useTransform } from 'motion/react';
-import { ArrowRight, ArrowUp, X } from 'lucide-react';
+import { ArrowRight, ArrowUp, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import ScrollReveal from './components/ScrollReveal';
 
 const DESKTOP_FRAME_COUNT = 192;
@@ -18,6 +18,7 @@ const MOBILE_BACKGROUND_WEBM_URL = '/mobile-background.webm';
 const MOBILE_BACKGROUND_VIDEO_URL = '/mobile-background.mp4';
 const SPONSOR_VIDEO_WEBM_URL = '/sponsor-video.webm';
 const SPONSOR_VIDEO_URL = '/sponsor-video.mp4';
+const WISTIA_PLAYER_URL = 'https://fast.wistia.net/player.js';
 const ZOHO_ATTENDANCE_FORM_URL =
   'https://forms.zohopublic.eu/rikki/form/LetUsKnowYoureComing/formperma/HXE-JEIrRKpAvUyNGhJ8wQmyaP3L2wKVsRK1zdSJPSo';
 const ZOHO_HEALING_FORM_URL =
@@ -350,6 +351,29 @@ const healingCopy = {
   },
 };
 
+const healingVideos = [
+  {
+    id: 'hx3cdx22uw',
+    title: 'URGENT Your HEALING is EASY Prophet Uebert Angel [get.gt] Video',
+  },
+  {
+    id: '18paz3mqxi',
+    title: 'HEALING PROPHECY The Power of Jesus Christ demonstrated in London UK uebertangel jesus [get.gt] Video',
+  },
+  {
+    id: '18paz3mqxi',
+    title: 'HEALING PROPHECY The Power of Jesus Christ demonstrated in London UK uebertangel jesus [get.gt] Video',
+  },
+  {
+    id: 'st9bray66z',
+    title: 'HEALING HIV is miraculously healed live on TV Jesus is amazing [get.gt] Video',
+  },
+  {
+    id: 'lpje7fwr7g',
+    title: 'Watch Prophet Angel the man of God stretch forth his hand and heal this little girls leg [get.gt] Video',
+  },
+];
+
 const registerFormCopy = {
   en: {
     title: 'Register Now',
@@ -479,6 +503,7 @@ function App() {
   const mobileFrameImagesRef = useRef<HTMLImageElement[]>([]);
   const mobileLoadedFramesRef = useRef<boolean[]>([]);
   const lastDrawnFrameRef = useRef<{ variant: FrameVariant; index: number } | null>(null);
+  const healingVideoTrackRef = useRef<HTMLDivElement | null>(null);
   const targetFrameRef = useRef(0);
   const smoothedFrameRef = useRef(0);
   const targetVideoTimeRef = useRef(0);
@@ -503,6 +528,7 @@ function App() {
   const [isAboutLanguageVisible, setIsAboutLanguageVisible] = useState(false);
   const [isAboutMenuOpen, setIsAboutMenuOpen] = useState(false);
   const [isMobileBackgroundReady, setIsMobileBackgroundReady] = useState(false);
+  const [activeHealingVideoIndex, setActiveHealingVideoIndex] = useState(0);
   const [revealLanguage, setRevealLanguage] = useState<'en' | 'ja'>('en');
   const [attendanceLanguage, setAttendanceLanguage] = useState<'en' | 'ja'>('en');
   const { scrollY } = useScroll();
@@ -533,6 +559,13 @@ function App() {
     typeof window === 'undefined'
       ? ZOHO_HEALING_FORM_URL
       : `${ZOHO_HEALING_FORM_URL}?referrername=${encodeURIComponent(window.location.href.slice(0, 1800))}`;
+
+  const goToHealingVideo = (index: number) => {
+    const nextIndex = (index + healingVideos.length) % healingVideos.length;
+    setActiveHealingVideoIndex(nextIndex);
+    const target = healingVideoTrackRef.current?.children[nextIndex] as HTMLElement | undefined;
+    target?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  };
 
   const getFrameVariant = (): FrameVariant =>
     typeof window !== 'undefined' && window.matchMedia(`(max-width: ${MOBILE_FRAME_MAX_WIDTH}px)`).matches
@@ -623,6 +656,15 @@ function App() {
 
     return () => window.clearTimeout(embedTimer);
   }, [isSponsorOpen]);
+
+  useEffect(() => {
+    if (document.querySelector(`script[src="${WISTIA_PLAYER_URL}"]`)) return;
+
+    const script = document.createElement('script');
+    script.src = WISTIA_PLAYER_URL;
+    script.async = true;
+    document.body.appendChild(script);
+  }, []);
 
   useEffect(() => {
     if (!isAboutMenuOpen) return;
@@ -1501,10 +1543,90 @@ function App() {
                 >
                   {isHealingDetailsOpen ? healingCopy[revealLanguage].readLess : healingCopy[revealLanguage].readMore}
                 </button>
+                <div className="mt-6 max-w-[560px]">
+                  <div className="mb-3 flex items-center justify-between gap-3">
+                    <div className="h-px flex-1 bg-white/10" />
+                    <div className="flex shrink-0 items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => goToHealingVideo(activeHealingVideoIndex - 1)}
+                        className="grid h-9 w-9 place-items-center border border-white/20 bg-black/40 text-white transition-colors hover:border-[#d7b45a] hover:text-[#d7b45a]"
+                        aria-label="Previous healing video"
+                      >
+                        <ChevronLeft size={18} strokeWidth={2.2} />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => goToHealingVideo(activeHealingVideoIndex + 1)}
+                        className="grid h-9 w-9 place-items-center border border-white/20 bg-black/40 text-white transition-colors hover:border-[#d7b45a] hover:text-[#d7b45a]"
+                        aria-label="Next healing video"
+                      >
+                        <ChevronRight size={18} strokeWidth={2.2} />
+                      </button>
+                    </div>
+                  </div>
+                  <div
+                    ref={healingVideoTrackRef}
+                    className="flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain scroll-smooth pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                    onScroll={(event) => {
+                      const track = event.currentTarget;
+                      let nearestIndex = 0;
+                      let nearestDistance = Number.POSITIVE_INFINITY;
+
+                      Array.from(track.children).forEach((child, index) => {
+                        const slide = child as HTMLElement;
+                        const distance = Math.abs(slide.offsetLeft - track.scrollLeft);
+                        if (distance < nearestDistance) {
+                          nearestDistance = distance;
+                          nearestIndex = index;
+                        }
+                      });
+
+                      setActiveHealingVideoIndex((currentIndex) =>
+                        currentIndex === nearestIndex ? currentIndex : nearestIndex,
+                      );
+                    }}
+                  >
+                    {healingVideos.map((video, index) => (
+                      <div
+                        key={`${video.id}-${index}`}
+                        className="min-w-full snap-center overflow-hidden border border-white/10 bg-black/70 shadow-[0_24px_80px_rgba(0,0,0,0.35)] sm:min-w-[360px]"
+                      >
+                        <div className="relative w-full" style={{ paddingTop: '177.78%' }}>
+                          <iframe
+                            src={`https://fast.wistia.net/embed/iframe/${video.id}?web_component=true&seo=false`}
+                            title={video.title}
+                            allow="autoplay; fullscreen"
+                            frameBorder="0"
+                            scrolling="no"
+                            className="wistia_embed absolute left-0 top-0 h-full w-full"
+                            name="wistia_embed"
+                            width="100%"
+                            height="100%"
+                            loading="lazy"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-1 flex items-center gap-2">
+                    {healingVideos.map((video, index) => (
+                      <button
+                        key={`${video.id}-dot-${index}`}
+                        type="button"
+                        onClick={() => goToHealingVideo(index)}
+                        className={`h-1.5 transition-all ${
+                          activeHealingVideoIndex === index ? 'w-7 bg-[#d7b45a]' : 'w-3 bg-white/30'
+                        }`}
+                        aria-label={`Go to healing video ${index + 1}`}
+                      />
+                    ))}
+                  </div>
+                </div>
                 <button
                   type="button"
                   onClick={() => setIsHealingFormOpen(true)}
-                  className="mt-5 block bg-white px-6 py-4 font-mono text-xs font-bold uppercase tracking-[-0.01em] text-black transition-colors hover:bg-gray-200"
+                  className="mt-6 block bg-white px-6 py-4 font-mono text-xs font-bold uppercase tracking-[-0.01em] text-black transition-colors hover:bg-gray-200"
                 >
                   {healingCopy[revealLanguage].register}
                 </button>
