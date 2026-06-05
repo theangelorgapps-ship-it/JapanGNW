@@ -5,7 +5,7 @@ import ScrollReveal from './components/ScrollReveal';
 
 const DESKTOP_FRAME_COUNT = 192;
 const MOBILE_FRAME_SOURCE_COUNT = 361;
-const MOBILE_FRAME_COUNT = 72;
+const MOBILE_FRAME_COUNT = 144;
 const INITIAL_PRELOAD_COUNT = 18;
 const PRELOADER_MIN_VISIBLE_MS = 2600;
 const PRELOADER_DISSOLVE_MS = 900;
@@ -671,7 +671,7 @@ function App() {
     let preloadTimer = 0;
     const initialVariant = getFrameVariant();
     const initialFrameCount = getFrameCount(initialVariant);
-    const initialPreloadCount = initialVariant === 'mobile' ? 8 : INITIAL_PRELOAD_COUNT;
+    const initialPreloadCount = initialVariant === 'mobile' ? 16 : INITIAL_PRELOAD_COUNT;
 
     for (let index = 0; index < Math.min(initialPreloadCount, initialFrameCount); index += 1) {
       loadFrame(index, initialVariant, !isCancelled);
@@ -681,8 +681,8 @@ function App() {
     const preloadNextBatch = () => {
       if (isCancelled || nextPreloadIndex >= initialFrameCount) return;
 
-      const batchSize = initialVariant === 'mobile' ? 2 : 10;
-      const batchDelay = initialVariant === 'mobile' ? 260 : 120;
+      const batchSize = initialVariant === 'mobile' ? 4 : 10;
+      const batchDelay = initialVariant === 'mobile' ? 180 : 120;
       const batchEnd = Math.min(nextPreloadIndex + batchSize, initialFrameCount);
       for (let index = nextPreloadIndex; index < batchEnd; index += 1) {
         loadFrame(index, initialVariant);
