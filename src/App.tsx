@@ -1540,27 +1540,7 @@ function App() {
                   {isHealingDetailsOpen ? healingCopy[revealLanguage].readLess : healingCopy[revealLanguage].readMore}
                 </button>
                 <div className="mt-5 max-w-[560px]">
-                  <div className="mb-3 flex items-center justify-between gap-3">
-                    <div className="h-px flex-1 bg-white/10" />
-                    <div className="flex shrink-0 items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={() => goToHealingVideo(activeHealingVideoIndex - 1)}
-                        className="grid h-8 w-8 place-items-center border border-white/20 bg-black/40 text-white transition-colors hover:border-[#d7b45a] hover:text-[#d7b45a] sm:h-9 sm:w-9"
-                        aria-label="Previous healing video"
-                      >
-                        <ChevronLeft size={16} strokeWidth={2.2} />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => goToHealingVideo(activeHealingVideoIndex + 1)}
-                        className="grid h-8 w-8 place-items-center border border-white/20 bg-black/40 text-white transition-colors hover:border-[#d7b45a] hover:text-[#d7b45a] sm:h-9 sm:w-9"
-                        aria-label="Next healing video"
-                      >
-                        <ChevronRight size={16} strokeWidth={2.2} />
-                      </button>
-                    </div>
-                  </div>
+                  <div className="mb-3 h-px bg-white/10" />
                   <div className="relative">
                     <div
                       ref={healingVideoTrackRef}
@@ -1607,6 +1587,22 @@ function App() {
                       ))}
                     </div>
                     <div className="pointer-events-none absolute inset-y-0 right-0 w-28 bg-gradient-to-l from-black/85 via-black/45 to-transparent sm:hidden" />
+                    <button
+                      type="button"
+                      onClick={() => goToHealingVideo(activeHealingVideoIndex - 1)}
+                      className="absolute left-1 top-1/2 z-10 grid h-8 w-8 -translate-y-1/2 place-items-center border border-white/25 bg-black/55 text-white shadow-[0_10px_30px_rgba(0,0,0,0.38)] backdrop-blur-sm transition-colors hover:border-[#d7b45a] hover:text-[#d7b45a] sm:left-3 sm:h-10 sm:w-10"
+                      aria-label="Previous healing video"
+                    >
+                      <ChevronLeft size={16} strokeWidth={2.2} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => goToHealingVideo(activeHealingVideoIndex + 1)}
+                      className="absolute right-1 top-1/2 z-10 grid h-8 w-8 -translate-y-1/2 place-items-center border border-white/25 bg-black/55 text-white shadow-[0_10px_30px_rgba(0,0,0,0.38)] backdrop-blur-sm transition-colors hover:border-[#d7b45a] hover:text-[#d7b45a] sm:right-3 sm:h-10 sm:w-10"
+                      aria-label="Next healing video"
+                    >
+                      <ChevronRight size={16} strokeWidth={2.2} />
+                    </button>
                   </div>
                   <div className="mt-1 flex items-center gap-2">
                     {healingVideos.map((video, index) => (
