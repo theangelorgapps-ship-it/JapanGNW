@@ -369,7 +369,7 @@ const healingVideos = [
   },
   {
     id: 'lpje7fwr7g',
-    displayTitle: "Little Girl's Leg Healed",
+    displayTitle: "4. LITTLE GIRL'S LEG HEALED (🔴LIVE)",
     title: 'Watch Prophet Angel the man of God stretch forth his hand and heal this little girls leg [get.gt] Video',
   },
 ];
@@ -1569,8 +1569,12 @@ function App() {
                       }}
                     >
                       {healingVideos.map((video, index) => (
-                        <div
+                        <motion.div
                           key={`${video.id}-${index}`}
+                          initial={{ opacity: 0, x: 70 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true, margin: '-80px' }}
+                          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: index * 0.14 }}
                           className="min-w-[36%] snap-center overflow-hidden border border-white/10 bg-black/70 shadow-[0_16px_44px_rgba(0,0,0,0.32)] md:min-w-0 md:shadow-[0_24px_80px_rgba(0,0,0,0.35)]"
                         >
                           <p className="flex min-h-10 items-center border-b border-white/10 px-2 py-2 font-mono text-[9px] font-bold uppercase leading-tight tracking-[0.05em] text-[#d7b45a] md:min-h-11 md:px-3 md:text-[10px]">
@@ -1590,7 +1594,7 @@ function App() {
                               loading="lazy"
                             />
                           </div>
-                        </div>
+                        </motion.div>
                       ))}
                     </div>
                     <div className="pointer-events-none absolute inset-y-0 right-0 w-28 bg-gradient-to-l from-black/85 via-black/45 to-transparent sm:hidden" />
