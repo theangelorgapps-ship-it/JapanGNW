@@ -4,7 +4,8 @@ import { ArrowRight, ArrowUp, X } from 'lucide-react';
 import ScrollReveal from './components/ScrollReveal';
 
 const DESKTOP_FRAME_COUNT = 192;
-const MOBILE_FRAME_COUNT = 361;
+const MOBILE_FRAME_SOURCE_COUNT = 361;
+const MOBILE_FRAME_COUNT = 181;
 const INITIAL_PRELOAD_COUNT = 18;
 const PRELOADER_MIN_VISIBLE_MS = 2600;
 const PRELOADER_DISSOLVE_MS = 900;
@@ -26,7 +27,11 @@ type FrameVariant = 'desktop' | 'mobile';
 
 function getFrameSrc(index: number, variant: FrameVariant) {
   const directory = variant === 'mobile' ? 'frames-mobile' : 'frames';
-  return `/${directory}/frame-${String(index + 1).padStart(4, '0')}.webp`;
+  const sourceIndex =
+    variant === 'mobile'
+      ? Math.round((index / Math.max(1, MOBILE_FRAME_COUNT - 1)) * (MOBILE_FRAME_SOURCE_COUNT - 1))
+      : index;
+  return `/${directory}/frame-${String(sourceIndex + 1).padStart(4, '0')}.webp`;
 }
 
 function getFrameCount(variant: FrameVariant) {
@@ -39,7 +44,7 @@ function smoothScrollToHash(hash: string) {
   target.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-function WisaLogo({ className = '' }: { className?: string }) {
+function WisaLogo({ className = '', loading = 'lazy' }: { className?: string; loading?: 'eager' | 'lazy' }) {
   return (
     <img
       className={className}
@@ -47,7 +52,7 @@ function WisaLogo({ className = '' }: { className?: string }) {
       alt="WISA"
       width="157"
       height="25"
-      loading="eager"
+      loading={loading}
       decoding="async"
       style={{ objectFit: 'contain' }}
     />
@@ -174,6 +179,30 @@ function SplitCta({
       </span>
     </button>
   );
+}
+
+function useNearViewport<T extends Element>(rootMargin = '700px') {
+  const ref = useRef<T | null>(null);
+  const [isNearViewport, setIsNearViewport] = useState(false);
+
+  useEffect(() => {
+    const target = ref.current;
+    if (!target || isNearViewport) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        setIsNearViewport(true);
+        observer.disconnect();
+      },
+      { rootMargin },
+    );
+
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [isNearViewport, rootMargin]);
+
+  return [ref, isNearViewport] as const;
 }
 
 function LanguageToggle({
@@ -449,6 +478,7 @@ function App() {
   const preloaderStartedAtRef = useRef(Date.now());
   const screen3Ref = useRef<HTMLDivElement | null>(null);
   const sponsorVideoRef = useRef<HTMLDivElement | null>(null);
+  const [sponsorSectionRef, isSponsorSectionNear] = useNearViewport<HTMLElement>('900px');
   const aboutMenuRef = useRef<HTMLDivElement | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isPreloaderVisible, setIsPreloaderVisible] = useState(true);
@@ -554,13 +584,13 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (document.querySelector(`script[src="${WISTIA_PLAYER_URL}"]`)) return;
+    if (!isSponsorSectionNear || document.querySelector(`script[src="${WISTIA_PLAYER_URL}"]`)) return;
 
     const script = document.createElement('script');
     script.src = WISTIA_PLAYER_URL;
     script.async = true;
     document.body.appendChild(script);
-  }, []);
+  }, [isSponsorSectionNear]);
 
   useEffect(() => {
     if (!isSponsorOpen) {
@@ -660,12 +690,12 @@ function App() {
     const preloadNextBatch = () => {
       if (isCancelled || nextPreloadIndex >= initialFrameCount) return;
 
-      const batchEnd = Math.min(nextPreloadIndex + 10, initialFrameCount);
+      const batchEnd = Math.min(nextPreloadIndex + (initialVariant === 'mobile' ? 5 : 10), initialFrameCount);
       for (let index = nextPreloadIndex; index < batchEnd; index += 1) {
         loadFrame(index, initialVariant);
       }
       nextPreloadIndex = batchEnd;
-      preloadTimer = window.setTimeout(preloadNextBatch, initialVariant === 'mobile' ? 90 : 120);
+      preloadTimer = window.setTimeout(preloadNextBatch, initialVariant === 'mobile' ? 180 : 120);
     };
 
     preloadTimer = window.setTimeout(preloadNextBatch, 250);
@@ -693,7 +723,7 @@ function App() {
       const image = loaded[frameIndex] ? targetImage : fallbackImage;
       if (!image?.naturalWidth || !image.naturalHeight) return;
 
-      const dpr = window.devicePixelRatio || 1;
+      const dpr = Math.min(window.devicePixelRatio || 1, variant === 'mobile' ? 1.25 : 2);
       const width = window.innerWidth;
       const height = window.innerHeight;
       const nextWidth = Math.round(width * dpr);
@@ -754,7 +784,7 @@ function App() {
   }, [isLoaded]);
 
   return (
-    <div className="min-h-screen bg-black font-sans text-white selection:bg-white selection:text-black">
+    <div className="min-h-screen overflow-x-clip bg-black font-sans text-white selection:bg-white selection:text-black">
       {(isPreloaderVisible || shouldPreviewPreloader) && (
         <div
           className={`fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden bg-[#080806] ${
@@ -779,7 +809,7 @@ function App() {
           <div className="relative flex w-[90%] max-w-[720px] flex-col items-center text-center">
             <div className="animate-preloader-medallion relative flex h-32 w-32 items-center justify-center md:h-40 md:w-40">
               <div className="absolute inset-0 rounded-full bg-[#d7b45a]/10 blur-3xl" />
-              <WisaLogo className="relative z-[1] h-24 w-24 drop-shadow-[0_0_36px_rgba(215,180,90,0.45)] md:h-32 md:w-32" />
+              <WisaLogo loading="eager" className="relative z-[1] h-24 w-24 drop-shadow-[0_0_36px_rgba(215,180,90,0.45)] md:h-32 md:w-32" />
             </div>
             <div className="animate-preloader-title-rise mt-8">
               <div className="text-[clamp(2rem,5vw,4.4rem)] font-semibold leading-none tracking-tight text-[#e9c76c] drop-shadow-[0_8px_24px_rgba(0,0,0,0.65)]">
@@ -823,7 +853,7 @@ function App() {
             }}
             className="flex h-7 w-8 shrink-0 items-center justify-center sm:h-8 sm:w-10 md:h-9 md:w-11"
           >
-            <WisaLogo className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8" />
+            <WisaLogo loading="eager" className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8" />
           </a>
           <div className="mx-1.5 h-6 w-px bg-white/18 sm:mx-2 sm:h-7" />
           <div className="flex min-w-0 items-center gap-2 text-center font-sans text-[11px] font-semibold tracking-[-0.01em] text-white/84 sm:gap-3 sm:text-xs md:text-[13px]">
@@ -850,7 +880,7 @@ function App() {
                     : { opacity: 0, y: -6, scale: 0.98 }
                 }
                 transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-                className={`absolute left-1/2 top-[calc(100%+14px)] z-30 w-[300px] -translate-x-1/2 border border-white/12 bg-[#151515]/88 p-2 text-left shadow-2xl shadow-black/35 backdrop-blur-[80px] ${
+                className={`absolute left-1/2 top-[calc(100%+14px)] z-30 w-[min(300px,calc(100vw-32px))] -translate-x-1/2 border border-white/12 bg-[#151515]/88 p-2 text-left shadow-2xl shadow-black/35 backdrop-blur-[80px] ${
                   isAboutMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'
                 }`}
                 role="menu"
@@ -1015,6 +1045,7 @@ function App() {
               id="ziframe_200345"
               aria-label="Let Us Know You're Coming"
               frameBorder="0"
+              loading="lazy"
               style={{ height: 500, width: '99%', border: 'none' }}
               src={attendanceFormUrl}
               title="Let Us Know You're Coming"
@@ -1060,6 +1091,7 @@ function App() {
               aria-label="Your Healing Classroom - August Session with The Ra'ah - Prophet Uebert Angel (JAPAN)"
               frameBorder="0"
               allow="geolocation;"
+              loading="lazy"
               style={{ height: 500, width: '99%', border: 'none' }}
               src={healingFormUrl}
               title="GoodNews Japan Healing line"
@@ -1101,6 +1133,7 @@ function App() {
                   allowPaymentRequest
                   seamless
                   frameBorder="0"
+                  loading="lazy"
                   scrolling="no"
                   height="900px"
                   width="100%"
@@ -1167,7 +1200,7 @@ function App() {
         </motion.div>
       )}
 
-      <main className="relative z-10 pointer-events-none">
+      <main className="relative z-10 overflow-x-clip pointer-events-none">
         <section
           id="home"
           className="mx-auto flex min-h-[100svh] w-[90%] flex-col pb-7 pt-24 md:h-screen md:pb-12 md:pt-28 lg:pb-16 lg:pt-32"
@@ -1356,7 +1389,7 @@ function App() {
 
         <div className="h-12 w-full md:h-16" />
 
-        <section id="goodnews-daily" className="mx-auto flex min-h-[90vh] w-[90%] scroll-mt-28 flex-col justify-center pb-16 pt-8 pointer-events-auto md:pt-10">
+        <section ref={sponsorSectionRef} id="goodnews-daily" className="mx-auto flex min-h-[90vh] w-[90%] scroll-mt-28 flex-col justify-center pb-16 pt-8 pointer-events-auto md:pt-10">
           <div className="grid w-full grid-cols-1 items-center gap-10 border-y border-white/10 py-12 md:grid-cols-12 md:gap-10 lg:py-14">
             <Reveal className="md:col-span-6">
               <p className="mb-4 font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-[#f0d794] drop-shadow-[0_2px_10px_rgba(0,0,0,0.75)]">
@@ -1378,10 +1411,11 @@ function App() {
               >
                 <div className="relative w-full" style={{ paddingTop: '125%' }}>
                   <iframe
-                    src={SPONSOR_WISTIA_URL}
+                    src={isSponsorSectionNear ? SPONSOR_WISTIA_URL : undefined}
                     title="Project Japan sponsor video"
                     allow="autoplay; fullscreen"
                     frameBorder="0"
+                    loading="lazy"
                     scrolling="no"
                     className="wistia_embed absolute left-0 top-0 h-full w-full"
                     name="wistia_embed"

@@ -44,50 +44,34 @@ export default function ScrollReveal({
     const container = containerRef.current;
     if (!container) return;
 
+    const isNarrowScreen =
+      typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches;
     const words = gsap.utils.toArray<HTMLElement>(container.querySelectorAll('.word'));
     const scroller = scrollContainerRef?.current ?? undefined;
-
-    gsap.fromTo(
-      container,
-      { rotate: baseRotation },
-      {
-        rotate: 0,
-        transformOrigin: '0% 50%',
-        ease: 'none',
-        scrollTrigger: {
-          trigger: container,
-          scroller,
-          start: 'top bottom',
-          end: rotationEnd,
-          scrub: true,
+    const context = gsap.context(() => {
+      gsap.fromTo(
+        container,
+        { rotate: isNarrowScreen ? 0 : baseRotation },
+        {
+          rotate: 0,
+          transformOrigin: '0% 50%',
+          ease: 'none',
+          scrollTrigger: {
+            trigger: container,
+            scroller,
+            start: 'top bottom',
+            end: rotationEnd,
+            scrub: true,
+          },
         },
-      },
-    );
+      );
 
-    gsap.fromTo(
-      words,
-      { opacity: baseOpacity },
-      {
-        opacity: 1,
-        stagger: 0.05,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: container,
-          scroller,
-          start: 'top bottom-=20%',
-          end: wordAnimationEnd,
-          scrub: true,
-        },
-      },
-    );
-
-    if (enableBlur) {
       gsap.fromTo(
         words,
-        { filter: `blur(${blurStrength}px)` },
+        { opacity: baseOpacity },
         {
-          filter: 'blur(0px)',
-          stagger: 0.05,
+          opacity: 1,
+          stagger: isNarrowScreen ? 0.025 : 0.05,
           ease: 'none',
           scrollTrigger: {
             trigger: container,
@@ -98,10 +82,29 @@ export default function ScrollReveal({
           },
         },
       );
-    }
+
+      if (enableBlur && !isNarrowScreen) {
+        gsap.fromTo(
+          words,
+          { filter: `blur(${blurStrength}px)` },
+          {
+            filter: 'blur(0px)',
+            stagger: 0.05,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: container,
+              scroller,
+              start: 'top bottom-=20%',
+              end: wordAnimationEnd,
+              scrub: true,
+            },
+          },
+        );
+      }
+    }, container);
 
     return () => {
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      context.revert();
     };
   }, [
     baseOpacity,
