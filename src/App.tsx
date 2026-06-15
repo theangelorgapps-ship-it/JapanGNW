@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { motion, useMotionValueEvent, useScroll, useTransform } from 'motion/react';
-import { ArrowRight, ArrowUp, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { ArrowRight, ArrowUp, ChevronLeft, ChevronRight, Play, X } from 'lucide-react';
 import ScrollReveal from './components/ScrollReveal';
 
 const DESKTOP_FRAME_COUNT = 192;
@@ -17,6 +17,9 @@ const GOODNEWS_DAILY_LOGO_URL = 'https://assets.cdn.filesafe.space/pVxIE30GROfdQ
 const SPONSOR_VIDEO_WEBM_URL = '/sponsor-video.webm';
 const SPONSOR_VIDEO_URL = '/sponsor-video.mp4';
 const WISTIA_PLAYER_URL = 'https://fast.wistia.net/player.js';
+const FEATURE_VIDEO_ID = 'jz6di91gmt';
+const FEATURE_VIDEO_EMBED_URL = `https://fast.wistia.net/embed/iframe/${FEATURE_VIDEO_ID}?web_component=true&seo=false&autoPlay=true&muted=false`;
+const FEATURE_VIDEO_THUMBNAIL_URL = `https://fast.wistia.com/embed/medias/${FEATURE_VIDEO_ID}/swatch`;
 const ZOHO_ATTENDANCE_FORM_URL =
   'https://forms.zohopublic.eu/rikki/form/LetUsKnowYoureComing/formperma/HXE-JEIrRKpAvUyNGhJ8wQmyaP3L2wKVsRK1zdSJPSo';
 const ZOHO_HEALING_FORM_URL =
@@ -522,6 +525,7 @@ function App() {
   const [isBackToTopVisible, setIsBackToTopVisible] = useState(false);
   const [isAboutLanguageVisible, setIsAboutLanguageVisible] = useState(false);
   const [isAboutMenuOpen, setIsAboutMenuOpen] = useState(false);
+  const [isFeatureVideoOpen, setIsFeatureVideoOpen] = useState(false);
   const [activeHealingVideoIndex, setActiveHealingVideoIndex] = useState(0);
   const [revealLanguage, setRevealLanguage] = useState<'en' | 'ja'>('en');
   const [attendanceLanguage, setAttendanceLanguage] = useState<'en' | 'ja'>('en');
@@ -1223,6 +1227,48 @@ function App() {
         </motion.div>
       )}
 
+      {isFeatureVideoOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 z-40 flex items-center justify-center bg-black/80 px-4 py-6 backdrop-blur-md"
+          role="dialog"
+          aria-modal="true"
+          aria-label="GoodNews Japan invitation video"
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 24, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            className="relative w-full max-w-[980px] overflow-hidden border border-white/10 bg-black text-white shadow-2xl"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              aria-label="Close video popup"
+              onClick={() => setIsFeatureVideoOpen(false)}
+              className="absolute right-4 top-4 z-10 flex h-10 w-10 shrink-0 items-center justify-center bg-black/65 text-white backdrop-blur-md transition-colors hover:bg-white hover:text-black"
+            >
+              <X className="h-5 w-5" />
+            </button>
+            <div className="relative w-full bg-black" style={{ paddingTop: '56.25%' }}>
+              <iframe
+                src={FEATURE_VIDEO_EMBED_URL}
+                title="netdna-ssl.com_1781521922252 Video"
+                allow="autoplay; fullscreen"
+                allowTransparency
+                frameBorder="0"
+                scrolling="no"
+                className="wistia_embed absolute left-0 top-0 h-full w-full"
+                name="wistia_embed"
+                width="100%"
+                height="100%"
+              />
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+
       {legalModal && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -1337,33 +1383,60 @@ function App() {
 
             <Reveal
               delay={0.4}
-              className="flex items-end justify-start md:col-span-5 md:col-start-8 md:row-start-2 md:justify-end lg:col-span-4 lg:col-start-9"
+              className="flex flex-col items-start justify-end gap-4 md:col-span-5 md:col-start-8 md:row-start-2 md:items-end lg:col-span-4 lg:col-start-9"
             >
-              <SplitCta
-                onClick={() => setIsAttendanceOpen(true)}
-                className="w-full max-w-[340px] sm:w-auto sm:max-w-none"
-                label={
-                  <span className="block min-w-0 overflow-hidden text-left sm:min-w-[170px]">
-                    <motion.span
-                      key={attendanceLanguage}
-                      initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                      className="block"
-                    >
-                      {attendanceLanguage === 'en' ? (
-                        <span className="block whitespace-nowrap text-[11px] leading-none tracking-[0.02em] sm:text-[14px]">
-                          Let Us Know You're Coming
-                        </span>
-                      ) : (
-                        <span className="block whitespace-nowrap text-[10px] leading-none tracking-[0.01em] sm:text-[13px]">
-                          お越しになる際はお知らせください。
-                        </span>
-                      )}
-                    </motion.span>
+              <div className="w-full max-w-[520px] overflow-hidden border border-white/10 bg-white/12 text-white shadow-[0_24px_80px_rgba(0,0,0,0.32)] backdrop-blur-[80px] md:max-w-[560px]">
+                <button
+                  type="button"
+                  aria-haspopup="dialog"
+                  aria-label="Watch the GoodNews Japan invitation video"
+                  onClick={() => setIsFeatureVideoOpen(true)}
+                  onPointerUp={() => setIsFeatureVideoOpen(true)}
+                  className="group/video flex w-full items-center gap-3 p-2 text-left transition-colors hover:bg-white/8 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#d7b45a] sm:gap-5 sm:p-4"
+                >
+                  <span className="relative h-[72px] w-[88px] shrink-0 overflow-hidden bg-black/55 sm:h-28 sm:w-40">
+                    <img
+                      src={FEATURE_VIDEO_THUMBNAIL_URL}
+                      alt=""
+                      className="h-full w-full scale-110 object-cover"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <span className="absolute inset-0 bg-gradient-to-tr from-black/45 via-black/5 to-white/10" />
+                    <span className="absolute left-1/2 top-1/2 grid h-9 w-9 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-black/78 text-white shadow-lg backdrop-blur-sm transition-colors group-hover/video:bg-white group-hover/video:text-black sm:h-10 sm:w-10">
+                      <Play className="ml-0.5 h-4 w-4" fill="currentColor" strokeWidth={1.8} />
+                    </span>
                   </span>
-                }
-              />
+                  <span className="min-w-0 flex-1 py-1 pr-1">
+                    <span className="block text-[13px] font-bold leading-tight text-white sm:text-lg">
+                      Your Special Invite! Watch Now.
+                    </span>
+                    <span className="mt-2 inline-flex items-center gap-2 bg-white/10 px-3 py-1.5 font-mono text-[10px] font-bold uppercase text-white transition-colors group-hover/video:bg-white group-hover/video:text-black sm:mt-4 sm:px-4 sm:py-2.5 sm:text-[11px]">
+                      Watch now
+                      <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.2} />
+                    </span>
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsAttendanceOpen(true)}
+                  onPointerUp={() => setIsAttendanceOpen(true)}
+                  className="group/attendance flex min-h-11 w-full items-center justify-between gap-4 border-t border-white/10 bg-white/8 px-4 py-2.5 font-mono text-[10px] font-bold tracking-[-0.01em] text-white/92 transition-colors hover:bg-white hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#d7b45a] sm:px-6 sm:py-4 sm:text-[11px]"
+                >
+                  <span className="block min-w-0 overflow-hidden text-left sm:min-w-[170px]">
+                    {attendanceLanguage === 'en' ? (
+                      <span className="block whitespace-nowrap text-[11px] leading-none tracking-[0.02em] sm:text-[14px]">
+                        Let Us Know You're Coming
+                      </span>
+                    ) : (
+                      <span className="block whitespace-nowrap text-[10px] leading-none tracking-[0.01em] sm:text-[13px]">
+                        お越しになる際はお知らせください。
+                      </span>
+                    )}
+                  </span>
+                  <ArrowRight className="h-5 w-5 shrink-0 transition-transform group-hover/attendance:translate-x-1" strokeWidth={1.75} />
+                </button>
+              </div>
             </Reveal>
           </div>
         </section>
