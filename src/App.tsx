@@ -14,8 +14,6 @@ const LOGO_URL = 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6
 const DATE_VENUE_LOGO_URL = 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6995a97ff02fa4d694442b64.webp';
 const HEALING_INSTITUTE_LOGO_URL = 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/697cfce550158bec52c80442.png';
 const GOODNEWS_DAILY_LOGO_URL = 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a203c12b75a113972d5cc41.webp';
-const MOBILE_BACKGROUND_WEBM_URL = '/mobile-background.webm';
-const MOBILE_BACKGROUND_VIDEO_URL = '/mobile-background.mp4';
 const SPONSOR_VIDEO_WEBM_URL = '/sponsor-video.webm';
 const SPONSOR_VIDEO_URL = '/sponsor-video.mp4';
 const WISTIA_PLAYER_URL = 'https://fast.wistia.net/player.js';
@@ -497,7 +495,6 @@ const legalCopy = {
 
 function App() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const mobileBackgroundVideoRef = useRef<HTMLVideoElement | null>(null);
   const frameImagesRef = useRef<HTMLImageElement[]>([]);
   const loadedFramesRef = useRef<boolean[]>([]);
   const mobileFrameImagesRef = useRef<HTMLImageElement[]>([]);
@@ -506,8 +503,6 @@ function App() {
   const healingVideoTrackRef = useRef<HTMLDivElement | null>(null);
   const targetFrameRef = useRef(0);
   const smoothedFrameRef = useRef(0);
-  const targetVideoTimeRef = useRef(0);
-  const smoothedVideoTimeRef = useRef(0);
   const preloaderStartedAtRef = useRef(Date.now());
   const screen3Ref = useRef<HTMLDivElement | null>(null);
   const sponsorVideoRef = useRef<HTMLDivElement | null>(null);
@@ -527,7 +522,6 @@ function App() {
   const [isBackToTopVisible, setIsBackToTopVisible] = useState(false);
   const [isAboutLanguageVisible, setIsAboutLanguageVisible] = useState(false);
   const [isAboutMenuOpen, setIsAboutMenuOpen] = useState(false);
-  const [isMobileBackgroundReady, setIsMobileBackgroundReady] = useState(false);
   const [activeHealingVideoIndex, setActiveHealingVideoIndex] = useState(0);
   const [revealLanguage, setRevealLanguage] = useState<'en' | 'ja'>('en');
   const [attendanceLanguage, setAttendanceLanguage] = useState<'en' | 'ja'>('en');
@@ -735,10 +729,6 @@ function App() {
     let isCancelled = false;
     let preloadTimer = 0;
     const initialVariant = getFrameVariant();
-    if (initialVariant === 'mobile') {
-      setIsLoaded(true);
-      return;
-    }
 
     const initialFrameCount = getFrameCount(initialVariant);
     const initialPreloadCount = initialVariant === 'mobile' ? 18 : INITIAL_PRELOAD_COUNT;
@@ -771,7 +761,6 @@ function App() {
 
   useEffect(() => {
     if (!isLoaded) return;
-    if (getFrameVariant() === 'mobile') return;
 
     let animationFrame = 0;
     let isAnimating = true;
@@ -869,95 +858,6 @@ function App() {
     };
   }, [isLoaded]);
 
-  useEffect(() => {
-    const interval = window.setInterval(() => {
-      const video = mobileBackgroundVideoRef.current;
-      if (!video || video.readyState < 1) return;
-      setIsMobileBackgroundReady(true);
-      window.clearInterval(interval);
-    }, 120);
-
-    return () => window.clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    if (!isMobileBackgroundReady) return;
-
-    const video = mobileBackgroundVideoRef.current;
-    if (!video) return;
-
-    let animationFrame = 0;
-    let isAnimating = true;
-
-    const seekVideoTo = (time: number) => {
-      if (typeof video.fastSeek === 'function') {
-        video.fastSeek(time);
-        return;
-      }
-
-      video.currentTime = time;
-    };
-
-    const updateTargetTime = () => {
-      if (!screen3Ref.current || !video.duration) return;
-
-      const rect = screen3Ref.current.getBoundingClientRect();
-      const absoluteTop = window.scrollY + rect.top;
-      const stopScroll = Math.max(1, absoluteTop - window.innerHeight * 0.2);
-      const scrollFraction = Math.max(0, Math.min(1, window.scrollY / stopScroll));
-      targetVideoTimeRef.current = Math.min(video.duration - 0.04, scrollFraction * video.duration);
-    };
-
-    const animateVideo = () => {
-      if (!isAnimating) return;
-
-      updateTargetTime();
-      const targetTime = targetVideoTimeRef.current;
-      const nextTime = smoothedVideoTimeRef.current + (targetTime - smoothedVideoTimeRef.current) * 0.18;
-      smoothedVideoTimeRef.current = Math.abs(targetTime - nextTime) < 0.025 ? targetTime : nextTime;
-
-      if (
-        video.readyState >= 1 &&
-        !video.seeking &&
-        Math.abs(video.currentTime - smoothedVideoTimeRef.current) > 0.025
-      ) {
-        seekVideoTo(smoothedVideoTimeRef.current);
-      }
-
-      animationFrame = window.requestAnimationFrame(animateVideo);
-    };
-
-    const startScrub = () => {
-      video.pause();
-      updateTargetTime();
-      smoothedVideoTimeRef.current = targetVideoTimeRef.current;
-      if (video.readyState >= 1) {
-        seekVideoTo(smoothedVideoTimeRef.current);
-      }
-      animationFrame = window.requestAnimationFrame(animateVideo);
-    };
-
-    const handleScrollOrResize = () => updateTargetTime();
-
-    window.addEventListener('scroll', handleScrollOrResize, { passive: true });
-    window.addEventListener('resize', handleScrollOrResize);
-
-    if (video.readyState >= 1) {
-      startScrub();
-    } else {
-      video.addEventListener('loadedmetadata', startScrub, { once: true });
-      video.load();
-    }
-
-    return () => {
-      isAnimating = false;
-      window.cancelAnimationFrame(animationFrame);
-      window.removeEventListener('scroll', handleScrollOrResize);
-      window.removeEventListener('resize', handleScrollOrResize);
-      video.removeEventListener('loadedmetadata', startScrub);
-    };
-  }, [isMobileBackgroundReady]);
-
   return (
     <div className="min-h-screen overflow-x-clip bg-black font-sans text-white selection:bg-white selection:text-black">
       {(isPreloaderVisible || shouldPreviewPreloader) && (
@@ -1005,17 +905,7 @@ function App() {
       )}
 
       <div className="fixed inset-0 z-0 bg-black">
-        <video
-          ref={mobileBackgroundVideoRef}
-          className="absolute inset-0 h-full w-full object-cover md:hidden"
-          src={MOBILE_BACKGROUND_VIDEO_URL}
-          poster="/frames-mobile/frame-0001.webp"
-          muted
-          onLoadedMetadata={() => setIsMobileBackgroundReady(true)}
-          playsInline
-          preload="auto"
-        />
-        <canvas ref={canvasRef} className="absolute inset-0 hidden h-full w-full md:block" />
+        <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
         <div className="absolute inset-0 bg-black/35" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,transparent_0%,rgba(0,0,0,0.18)_42%,rgba(0,0,0,0.78)_100%)]" />
       </div>
