@@ -18,7 +18,7 @@ const SPONSOR_VIDEO_WEBM_URL = '/sponsor-video.webm';
 const SPONSOR_VIDEO_URL = '/sponsor-video.mp4';
 const WISTIA_PLAYER_URL = 'https://fast.wistia.net/player.js';
 const FEATURE_VIDEO_ID = 'jz6di91gmt';
-const FEATURE_VIDEO_EMBED_URL = `https://fast.wistia.net/embed/iframe/${FEATURE_VIDEO_ID}?web_component=true&seo=false&autoPlay=true&muted=false`;
+const FEATURE_VIDEO_EMBED_URL = `https://fast.wistia.net/embed/iframe/${FEATURE_VIDEO_ID}?web_component=true&seo=false&autoPlay=true&muted=false&silentAutoPlay=false&volume=1`;
 const FEATURE_VIDEO_THUMBNAIL_URL = `https://fast.wistia.com/embed/medias/${FEATURE_VIDEO_ID}/swatch`;
 const ZOHO_ATTENDANCE_FORM_URL =
   'https://forms.zohopublic.eu/rikki/form/LetUsKnowYoureComing/formperma/HXE-JEIrRKpAvUyNGhJ8wQmyaP3L2wKVsRK1zdSJPSo';
@@ -564,6 +564,10 @@ function App() {
     const target = healingVideoTrackRef.current?.children[nextIndex] as HTMLElement | undefined;
     target?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
   };
+
+  const openFeatureVideo = () => setIsFeatureVideoOpen(true);
+
+  const closeFeatureVideo = () => setIsFeatureVideoOpen(false);
 
   const getFrameVariant = (): FrameVariant =>
     typeof window !== 'undefined' && window.matchMedia(`(max-width: ${MOBILE_FRAME_MAX_WIDTH}px)`).matches
@@ -1227,34 +1231,38 @@ function App() {
         </motion.div>
       )}
 
-      {isFeatureVideoOpen && (
+      <motion.div
+        initial={false}
+        animate={isFeatureVideoOpen ? { opacity: 1 } : { opacity: 0 }}
+        transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
+        className={`fixed inset-0 z-40 flex items-center justify-center bg-black/80 px-4 py-6 backdrop-blur-md ${
+          isFeatureVideoOpen ? 'pointer-events-auto' : 'pointer-events-none'
+        }`}
+        role="dialog"
+        aria-modal="true"
+        aria-hidden={!isFeatureVideoOpen}
+        aria-label="GoodNews Japan invitation video"
+      >
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="fixed inset-0 z-40 flex items-center justify-center bg-black/80 px-4 py-6 backdrop-blur-md"
-          role="dialog"
-          aria-modal="true"
-          aria-label="GoodNews Japan invitation video"
+          initial={false}
+          animate={isFeatureVideoOpen ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 24, scale: 0.98 }}
+          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          className="relative w-full max-w-[980px] overflow-hidden border border-white/10 bg-black text-white shadow-2xl"
+          onClick={(event) => event.stopPropagation()}
         >
-          <motion.div
-            initial={{ opacity: 0, y: 24, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="relative w-full max-w-[980px] overflow-hidden border border-white/10 bg-black text-white shadow-2xl"
-            onClick={(event) => event.stopPropagation()}
+          <button
+            type="button"
+            aria-label="Close video popup"
+            onClick={closeFeatureVideo}
+            className="absolute right-4 top-4 z-10 flex h-10 w-10 shrink-0 items-center justify-center bg-black/65 text-white backdrop-blur-md transition-colors hover:bg-white hover:text-black"
           >
-            <button
-              type="button"
-              aria-label="Close video popup"
-              onClick={() => setIsFeatureVideoOpen(false)}
-              className="absolute right-4 top-4 z-10 flex h-10 w-10 shrink-0 items-center justify-center bg-black/65 text-white backdrop-blur-md transition-colors hover:bg-white hover:text-black"
-            >
-              <X className="h-5 w-5" />
-            </button>
-            <div className="relative w-full bg-black" style={{ paddingTop: '56.25%' }}>
+            <X className="h-5 w-5" />
+          </button>
+          <div className="relative w-full bg-black" style={{ paddingTop: '56.25%' }}>
+            {isFeatureVideoOpen && (
               <iframe
                 src={FEATURE_VIDEO_EMBED_URL}
-                title="netdna-ssl.com_1781521922252 Video"
+                title="GoodNews Japan invitation video"
                 allow="autoplay; fullscreen"
                 allowTransparency
                 frameBorder="0"
@@ -1264,10 +1272,10 @@ function App() {
                 width="100%"
                 height="100%"
               />
-            </div>
-          </motion.div>
+            )}
+          </div>
         </motion.div>
-      )}
+      </motion.div>
 
       {legalModal && (
         <motion.div
@@ -1390,8 +1398,8 @@ function App() {
                   type="button"
                   aria-haspopup="dialog"
                   aria-label="Watch the GoodNews Japan invitation video"
-                  onClick={() => setIsFeatureVideoOpen(true)}
-                  onPointerUp={() => setIsFeatureVideoOpen(true)}
+                  onClick={openFeatureVideo}
+                  onPointerUp={openFeatureVideo}
                   className="group/video flex w-full items-center gap-3 p-2 text-left transition-colors hover:bg-white/8 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#d7b45a] sm:gap-5 sm:p-4"
                 >
                   <span className="relative h-[72px] w-[88px] shrink-0 overflow-hidden bg-black/55 sm:h-28 sm:w-40">
@@ -1408,11 +1416,19 @@ function App() {
                     </span>
                   </span>
                   <span className="min-w-0 flex-1 py-1 pr-1">
-                    <span className="block text-[13px] font-bold leading-tight text-white sm:text-lg">
-                      Your Special Invite! Watch Now.
-                    </span>
+                    <motion.span
+                      key={`invite-${attendanceLanguage}`}
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                      className={`block font-bold leading-tight text-white ${
+                        attendanceLanguage === 'ja' ? 'text-[12px] sm:text-base' : 'text-[13px] sm:text-lg'
+                      }`}
+                    >
+                      {attendanceLanguage === 'en' ? 'Your Special Invite! Watch Now.' : '特別なご招待！今すぐご覧ください。'}
+                    </motion.span>
                     <span className="mt-2 inline-flex items-center gap-2 bg-white/10 px-3 py-1.5 font-mono text-[10px] font-bold uppercase text-white transition-colors group-hover/video:bg-white group-hover/video:text-black sm:mt-4 sm:px-4 sm:py-2.5 sm:text-[11px]">
-                      Watch now
+                      {attendanceLanguage === 'en' ? 'Watch now' : '今すぐ見る'}
                       <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.2} />
                     </span>
                   </span>
