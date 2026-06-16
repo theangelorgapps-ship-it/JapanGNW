@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:video="http://www.google.com/schemas/sitemap-video/1.1"
+>
+  <url>
+    <loc>https://www.goodnewsjapan.com/</loc>
+    <video:video>
+      <video:thumbnail_loc>https://fast.wistia.com/embed/medias/jz6di91gmt/swatch</video:thumbnail_loc>
+      <video:title>GoodNews Japan 2026 Invitation Video</video:title>
+      <video:description>Invitation video for GoodNews Japan 2026 with Prophet Uebert Angel in Tokorozawa, Saitama, Japan. グッドニュース・ジャパン2026、預言者ユーバート・エンジェル師の来日イベント招待動画です。</video:description>
+      <video:player_loc allow_embed="yes">https://fast.wistia.net/embed/iframe/jz6di91gmt</video:player_loc>
+      <video:publication_date>2026-06-16</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:tag>GoodNews Japan</video:tag>
+      <video:tag>Prophet Uebert Angel</video:tag>
+      <video:tag>グッドニュースジャパン</video:tag>
+      <video:tag>ユーバートエンジェル</video:tag>
+    </video:video>
+    <video:video>
+      <video:thumbnail_loc>https://fast.wistia.com/embed/medias/hx3cdx22uw/swatch</video:thumbnail_loc>
+      <video:title>Your Healing Is Easy - GoodNews Japan</video:title>
+      <video:description>Healing message video connected to GoodNews Japan 2026 and the Healing Institute Japan registration. GoodNews Japan 2026に関連する癒しのメッセージ動画です。</video:description>
+      <video:player_loc allow_embed="yes">https://fast.wistia.net/embed/iframe/hx3cdx22uw</video:player_loc>
+      <video:publication_date>2026-06-16</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:tag>Healing is Easy</video:tag>
+      <video:tag>Healing Institute Japan</video:tag>
+      <video:tag>癒し</video:tag>
+      <video:tag>癒しと奇跡</video:tag>
+    </video:video>
+  </url>
+</urlset>
