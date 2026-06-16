@@ -12,6 +12,48 @@ const registerUrl =
 const healingUrl =
   'https://forms.zohopublic.eu/rikki/form/YourHealingClassroomAugustSessionwithTheRaahProphe/formperma/aKDRnUqNo_x0COJZBFJLc_aXWSKBBRTe3HiaRGL43Ig';
 
+const keywordClusters = {
+  brand: ['GoodNews Japan', 'GoodNewsJapan', 'GoodNews Japan 2026', 'GoodNews World Japan'],
+  prophet: [
+    'Uebert Angel Japan',
+    'Prophet Uebert Angel Japan',
+    "The Ra'ah Japan",
+    'Uebert Angel Tokyo',
+    'Uebert Angel Saitama',
+  ],
+  church: [
+    'Spirit Embassy Japan',
+    'Spirit Embassy Tokyo',
+    'GoodNews Church Japan',
+    'Spirit Embassy GoodNews Church Japan',
+  ],
+  event: [
+    'GoodNews Japan registration',
+    'GoodNews Japan tickets',
+    'GoodNews Japan venue',
+    'GoodNews Japan August 14 2026',
+    'Christian event Japan 2026',
+    'prophetic conference Japan',
+    'healing event Japan',
+    'miracles event Japan',
+  ],
+  japanese: [
+    'グッドニュース ジャパン',
+    'グッドニュースジャパン',
+    'ユーバート エンジェル 日本',
+    '預言者 ユーバート エンジェル',
+    'スピリット エンバシー 日本',
+    'グッドニュースワールド 日本',
+    '日本 キリスト教 イベント 2026',
+    '癒し 集会 日本',
+    '預言 集会 日本',
+    '埼玉 キリスト教 イベント',
+    '所沢 ミューズ イベント',
+  ],
+};
+
+const allKeywordClusters = Object.values(keywordClusters).flat();
+
 const eventSchema = {
   '@context': 'https://schema.org',
   '@type': 'Event',
@@ -20,7 +62,8 @@ const eventSchema = {
   name: 'GoodNews Japan 2026 with Prophet Uebert Angel',
   alternateName: ['グッドニュース・ジャパン 2026', 'グッドニュースジャパン', 'GoodNews Japan'],
   description:
-    'GoodNews Japan 2026 with The Raah, Prophet Uebert Angel. A healing and miracles event in Tokorozawa, Saitama, Japan.',
+    'GoodNews Japan 2026 with The Raah, Prophet Uebert Angel. A Christian event Japan 2026, healing event Japan, miracles event Japan, and prophetic conference Japan in Tokorozawa, Saitama, near Tokyo.',
+  keywords: allKeywordClusters,
   startDate: '2026-08-14',
   endDate: '2026-08-16',
   eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
@@ -83,6 +126,7 @@ const organizationSchema = {
   '@type': 'Organization',
   '@id': `${site}/#organization`,
   name: 'GoodNews World',
+  alternateName: ['GoodNews World Japan', 'GoodNews Church Japan', 'Spirit Embassy GoodNews Church Japan'],
   url: 'https://goodnewsworld.com/',
   logo: image,
   sameAs: eventSchema.organizer.sameAs,
@@ -114,14 +158,14 @@ const pages = [
       h1: 'GoodNews Japan 2026',
       eyebrow: 'August 14-16, 2026 / Tokorozawa, Saitama',
       intro:
-        'GoodNews Japan 2026 is a healing and miracles event with The Raah, Prophet Uebert Angel, coming to Tokorozawa Civic Cultural Centre MUSE, Marquee Hall in Saitama, Japan.',
+        "GoodNews Japan 2026 is a healing and miracles event with The Raah, Prophet Uebert Angel, coming to Tokorozawa Civic Cultural Centre MUSE, Marquee Hall in Saitama, Japan. It is also relevant for searches like GoodNewsJapan, GoodNews World Japan, Christian event Japan 2026, prophetic conference Japan, healing event Japan, and miracles event Japan.",
       sections: [
-        ['Why GoodNews Japan matters', 'Japan is entering a special season of blessing, healing, miracles, and the GoodNews message. This page gives search engines and visitors a clear summary of the event, date, venue, speaker, and registration route.'],
+        ['Why GoodNews Japan matters', 'Japan is entering a special season of blessing, healing, miracles, and the GoodNews message. This page gives search engines and visitors a clear summary of the event, date, venue, speaker, and registration route for GoodNews Japan registration and GoodNews Japan tickets.'],
         ['Event details', 'The event runs August 14-16, 2026 at Tokorozawa Civic Cultural Centre MUSE, Marquee Hall, 1-9-1 Namiki, Tokorozawa, Saitama 359-0042, Japan.'],
-        ['Speaker and organizer', 'The featured speaker is Prophet Uebert Angel. The event is connected with GoodNews World, GoodNews Daily Project Japan, and Healing Institute Japan.'],
+        ["Speaker and organizer", "The featured speaker is Prophet Uebert Angel. This connects search intent around Uebert Angel Japan, Prophet Uebert Angel Japan, The Ra'ah Japan, Uebert Angel Tokyo, and Uebert Angel Saitama with the official event details."],
       ],
       cta: 'Register for GoodNews Japan 2026',
-      keywords: ['GoodNews Japan', 'GoodNewsJapan', 'GoodNews Japan 2026'],
+      keywords: [...keywordClusters.brand, ...keywordClusters.event],
     },
     ja: {
       title: 'グッドニュースジャパン2026 | ユーバート・エンジェル師 来日',
@@ -130,14 +174,14 @@ const pages = [
       h1: 'グッドニュースジャパン2026',
       eyebrow: '2026年8月14～16日 / 埼玉県所沢市',
       intro:
-        'グッドニュースジャパン2026は、預言者ユーバート・エンジェル師が日本に来られる、癒しと奇跡のイベントです。会場は埼玉県所沢市の所沢市民文化センター ミューズ マーキーホールです。',
+        'グッドニュースジャパン2026は、預言者ユーバート・エンジェル師が日本に来られる、癒しと奇跡のイベントです。会場は埼玉県所沢市の所沢市民文化センター ミューズ マーキーホールです。グッドニュース ジャパン、グッドニュースワールド 日本、日本 キリスト教 イベント 2026を探している方にも分かりやすい情報です。',
       sections: [
-        ['グッドニュースジャパンについて', '日本に素晴らしいニュースが届きました。癒し、奇跡、回復、祝福のメッセージが、GoodNews Japan 2026を通して日本に届けられます。'],
+        ['グッドニュースジャパンについて', '日本に素晴らしいニュースが届きました。癒し、奇跡、回復、祝福のメッセージが、GoodNews Japan 2026を通して日本に届けられます。癒し 集会 日本、預言 集会 日本、埼玉 キリスト教 イベントを探している方にも関連するイベントです。'],
         ['日程と会場', '2026年8月14日から16日まで、所沢市民文化センター ミューズ マーキーホールで開催されます。住所は〒359-0042 埼玉県所沢市並木1-9-1です。'],
         ['講師と主催', '講師は預言者ユーバート・エンジェル師です。GoodNews World、GoodNews Daily Project Japan、Healing Institute Japanに関連するイベントです。'],
       ],
       cta: 'グッドニュースジャパン2026に登録する',
-      keywords: ['グッドニュースジャパン', 'ユーバート エンジェル 日本'],
+      keywords: keywordClusters.japanese,
     },
   },
   {
@@ -149,14 +193,14 @@ const pages = [
       h1: 'Uebert Angel Japan',
       eyebrow: 'Prophet Uebert Angel in Japan',
       intro:
-        'Prophet Uebert Angel, The Raah, is coming to Japan for GoodNews Japan 2026. This page summarizes the Japan event, venue, dates, and registration details for people searching for Uebert Angel Japan.',
+        "Prophet Uebert Angel, The Raah, is coming to Japan for GoodNews Japan 2026. This page summarizes the Japan event, venue, dates, and registration details for people searching for Uebert Angel Japan, Prophet Uebert Angel Japan, The Ra'ah Japan, Uebert Angel Tokyo, and Uebert Angel Saitama.",
       sections: [
         ['Prophet Uebert Angel in Japan', 'GoodNews Japan 2026 brings Prophet Uebert Angel to Saitama for a focused season of healing, miracles, GoodNews, and prophetic ministry.'],
         ['When and where', 'The event takes place August 14-16, 2026 at Tokorozawa Civic Cultural Centre MUSE, Marquee Hall, near Tokyo.'],
         ['How to attend', 'Visitors can register through the official GoodNews Japan registration form and review healing-line details through the Healing Institute Japan form.'],
       ],
       cta: 'Register for Uebert Angel Japan',
-      keywords: ['Uebert Angel Japan', 'Prophet Uebert Angel Japan'],
+      keywords: keywordClusters.prophet,
     },
     ja: {
       title: '預言者 ユーバート・エンジェル師 日本 | GoodNews Japan 2026',
@@ -165,14 +209,14 @@ const pages = [
       h1: '預言者 ユーバート・エンジェル師 日本',
       eyebrow: 'ユーバート・エンジェル師 来日イベント',
       intro:
-        '預言者ユーバート・エンジェル師が、GoodNews Japan 2026のために日本に来られます。癒し、奇跡、回復、祝福を求める方のための来日イベントです。',
+        '預言者ユーバート・エンジェル師が、GoodNews Japan 2026のために日本に来られます。ユーバート エンジェル 日本、預言者 ユーバート エンジェルを探している方のための来日イベント情報です。',
       sections: [
         ['ユーバート・エンジェル師について', 'GoodNews Worldの預言者ユーバート・エンジェル師が、日本に祝福のメッセージを届けるために来日されます。'],
         ['開催情報', '日程は2026年8月14～16日。会場は埼玉県所沢市の所沢市民文化センター ミューズ マーキーホールです。'],
         ['参加方法', '参加希望の方は、GoodNews Japan公式登録フォームから事前登録できます。癒しのラインに関する詳細も公式フォームで案内されています。'],
       ],
       cta: 'ユーバート・エンジェル師 来日イベントに登録する',
-      keywords: ['預言者 ユーバート エンジェル', 'ユーバート エンジェル 日本'],
+      keywords: ['預言者 ユーバート エンジェル', 'ユーバート エンジェル 日本', 'グッドニュースジャパン'],
     },
   },
   {
@@ -184,14 +228,14 @@ const pages = [
       h1: 'Spirit Embassy Japan',
       eyebrow: 'GoodNews Church event in Japan',
       intro:
-        'People searching for Spirit Embassy Japan or GoodNews Church Japan can find event information here for GoodNews Japan 2026 with Prophet Uebert Angel.',
+        'People searching for Spirit Embassy Japan, Spirit Embassy Tokyo, GoodNews Church Japan, or Spirit Embassy GoodNews Church Japan can find event information here for GoodNews Japan 2026 with Prophet Uebert Angel.',
       sections: [
         ['GoodNews Church in Japan', 'GoodNews Japan 2026 connects Japanese visitors with the GoodNews message, healing ministry, GoodNews World, and the wider Spirit Embassy family.'],
         ['Event focus', 'The event focuses on healing, miracles, prophetic ministry, registration, and clear venue information for visitors travelling to Saitama.'],
         ['Plan your visit', 'The venue is Tokorozawa Civic Cultural Centre MUSE, Marquee Hall, an accessible location in Saitama near Tokyo.'],
       ],
       cta: 'Register for GoodNews Church Japan event',
-      keywords: ['Spirit Embassy Japan', 'GoodNews Church Japan'],
+      keywords: keywordClusters.church,
     },
     ja: {
       title: 'スピリット エンバシー 日本 | GoodNews Japan 2026',
@@ -200,14 +244,14 @@ const pages = [
       h1: 'スピリット エンバシー 日本',
       eyebrow: 'GoodNews Church Japan イベント情報',
       intro:
-        'スピリット エンバシー 日本、GoodNews Church Japanを検索している方のために、GoodNews Japan 2026の情報をまとめました。',
+        'スピリット エンバシー 日本、GoodNews Church Japan、グッドニュースワールド 日本を検索している方のために、GoodNews Japan 2026の情報をまとめました。',
       sections: [
         ['日本でのGoodNewsイベント', 'GoodNews Japan 2026は、日本の方々にGoodNewsのメッセージ、癒し、奇跡、預言的な働きを届けるイベントです。'],
         ['開催の目的', '癒しと奇跡、回復、祝福、そしてGoodNews Worldのメッセージを日本に届けることを目的としています。'],
         ['会場とアクセス', '会場は埼玉県所沢市の所沢市民文化センター ミューズ マーキーホールです。東京近郊からもアクセスしやすい場所です。'],
       ],
       cta: 'GoodNews Japan 2026に登録する',
-      keywords: ['スピリット エンバシー 日本'],
+      keywords: ['スピリット エンバシー 日本', 'グッドニュースワールド 日本', 'グッドニュースジャパン'],
     },
   },
   {
@@ -219,14 +263,14 @@ const pages = [
       h1: 'Tokorozawa MUSE Venue',
       eyebrow: 'Saitama Christian event venue',
       intro:
-        'GoodNews Japan 2026 will be held at Tokorozawa Civic Cultural Centre MUSE, Marquee Hall, in Tokorozawa, Saitama, Japan.',
+        'GoodNews Japan 2026 will be held at Tokorozawa Civic Cultural Centre MUSE, Marquee Hall, in Tokorozawa, Saitama, Japan. This page targets GoodNews Japan venue, Tokorozawa MUSE, Saitama Christian event, and venue searches near Tokyo.',
       sections: [
         ['Venue name', 'Tokorozawa Civic Cultural Centre MUSE, Marquee Hall. Japanese: 所沢市民文化センター ミューズ マーキーホール.'],
         ['Venue address', '1-9-1 Namiki, Tokorozawa, Saitama 359-0042, Japan. This Saitama venue is near Tokyo and suitable for visitors travelling from the wider region.'],
         ['Event dates', 'GoodNews Japan 2026 takes place August 14-16, 2026. Attendees should register before travelling so the team can prepare for arrival and session instructions.'],
       ],
       cta: 'Register before visiting Tokorozawa MUSE',
-      keywords: ['Tokorozawa MUSE', 'Saitama Christian event'],
+      keywords: ['GoodNews Japan venue', 'Tokorozawa MUSE', 'Saitama Christian event', 'Uebert Angel Saitama'],
     },
     ja: {
       title: '所沢ミューズ 会場 | グッドニュースジャパン2026',
@@ -235,14 +279,14 @@ const pages = [
       h1: '所沢ミューズ 会場',
       eyebrow: '埼玉県所沢市の会場情報',
       intro:
-        'GoodNews Japan 2026は、埼玉県所沢市の所沢市民文化センター ミューズ マーキーホールで開催されます。',
+        'GoodNews Japan 2026は、埼玉県所沢市の所沢市民文化センター ミューズ マーキーホールで開催されます。所沢 ミューズ イベント、埼玉 キリスト教 イベントを探している方のための会場情報です。',
       sections: [
         ['会場名', '所沢市民文化センター ミューズ マーキーホール。英語表記はTokorozawa Civic Cultural Centre MUSE, Marquee Hallです。'],
         ['住所', '〒359-0042 埼玉県所沢市並木1-9-1。東京近郊からもアクセスしやすい埼玉県所沢市の会場です。'],
         ['開催日', '開催日は2026年8月14日から16日です。来場前に公式フォームから登録してください。'],
       ],
       cta: '所沢ミューズのイベントに登録する',
-      keywords: ['所沢ミューズ', '埼玉 キリスト教 イベント'],
+      keywords: ['所沢 ミューズ イベント', '所沢ミューズ', '埼玉 キリスト教 イベント', 'グッドニュースジャパン'],
     },
   },
   {
@@ -254,14 +298,14 @@ const pages = [
       h1: 'GoodNews Japan Registration',
       eyebrow: 'Registration and ticket information',
       intro:
-        'Use the official GoodNews Japan registration form to let the team know you are coming to the August 14-16, 2026 event in Saitama.',
+        'Use the official GoodNews Japan registration form to let the team know you are coming to the August 14-16, 2026 event in Saitama. This page supports search intent for GoodNews Japan registration, GoodNews Japan tickets, and GoodNews Japan August 14 2026.',
       sections: [
         ['Register early', 'Spaces and session planning are managed through the official registration form. Registering early helps the team prepare admission and communication details.'],
         ['Healing line', 'Visitors seeking healing can also review the Healing Institute Japan form for healing-line information and session instructions.'],
         ['What to prepare', 'Prepare your name, country, attendance details, and contact information before completing the official form.'],
       ],
       cta: 'Open registration form',
-      keywords: ['GoodNews Japan registration', 'GoodNews Japan tickets'],
+      keywords: ['GoodNews Japan registration', 'GoodNews Japan tickets', 'GoodNews Japan August 14 2026', 'Christian event Japan 2026'],
     },
     ja: {
       title: 'グッドニュースジャパン 登録 | GoodNews Japan 2026',
@@ -270,14 +314,14 @@ const pages = [
       h1: 'グッドニュースジャパン 登録',
       eyebrow: '参加登録とチケット案内',
       intro:
-        'GoodNews Japan 2026に参加希望の方は、公式登録フォームからお越しになることをお知らせください。',
+        'GoodNews Japan 2026に参加希望の方は、公式登録フォームからお越しになることをお知らせください。グッドニュースジャパン 登録、日本 キリスト教 イベント 2026、癒し 集会 日本を探している方の登録ページです。',
       sections: [
         ['早めの登録', '参加登録を行うことで、入場やセッション案内、イベント連絡をスムーズに受け取ることができます。'],
         ['癒しのライン', '癒しを求めて参加される方は、Healing Institute Japanのフォームも確認してください。'],
         ['準備する情報', '氏名、国、参加区分、メールアドレスなど、必要な連絡情報を準備して登録してください。'],
       ],
       cta: '公式登録フォームを開く',
-      keywords: ['グッドニュースジャパン 登録', 'GoodNews Japan チケット'],
+      keywords: ['グッドニュースジャパン 登録', 'GoodNews Japan チケット', '日本 キリスト教 イベント 2026', '癒し 集会 日本'],
     },
   },
 ];
@@ -301,6 +345,11 @@ function pageHtml(page, lang) {
   const path = `/${lang}/${page.slug}/`;
   const otherPath = `/${otherLang}/${page.slug}/`;
   const canonical = `${site}${path}`;
+  const pageKeywords = [...new Set([...content.keywords, ...(lang === 'en' ? allKeywordClusters : keywordClusters.japanese)])];
+  const imageAlt =
+    lang === 'en'
+      ? `${content.h1} for GoodNews Japan 2026 with Prophet Uebert Angel in Saitama`
+      : `${content.h1} グッドニュースジャパン2026 預言者ユーバート エンジェル 日本`;
   const schema = [
     organizationSchema,
     {
@@ -310,7 +359,7 @@ function pageHtml(page, lang) {
       url: canonical,
       name: content.title,
       description: content.description,
-      keywords: content.keywords,
+      keywords: pageKeywords,
       inLanguage: lang,
       isPartOf: {
         '@id': `${site}/#website`,
@@ -321,6 +370,7 @@ function pageHtml(page, lang) {
       primaryImageOfPage: {
         '@type': 'ImageObject',
         url: image,
+        caption: imageAlt,
       },
       breadcrumb: {
         '@id': `${canonical}#breadcrumb`,
@@ -368,7 +418,7 @@ function pageHtml(page, lang) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>${esc(content.title)}</title>
     <meta name="description" content="${esc(content.description)}" />
-    <meta name="keywords" content="${esc(content.keywords.join(', '))}" />
+    <meta name="keywords" content="${esc(pageKeywords.join(', '))}" />
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <link rel="canonical" href="${canonical}" />
     <link rel="alternate" hreflang="en" href="${site}/en/${page.slug}/" />
@@ -401,6 +451,9 @@ function pageHtml(page, lang) {
       section { border-top: 1px solid rgba(255,255,255,.14); padding: 34px 0; }
       .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
       .card { border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06); padding: 22px; }
+      .hero-image { display: block; width: min(720px, 100%); height: auto; margin: 28px 0 0; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06); }
+      .keywords { display: flex; flex-wrap: wrap; gap: 10px; padding: 0; list-style: none; }
+      .keywords li { border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06); padding: 8px 11px; font-size: 14px; line-height: 1.35; color: rgba(255,255,255,.82); }
       .cta { display: inline-block; margin-top: 16px; background: #fff; color: #000; padding: 16px 22px; font-weight: 700; text-decoration: none; }
       footer { margin-top: 34px; color: rgba(255,255,255,.58); font-size: 14px; }
     </style>
@@ -415,6 +468,7 @@ function pageHtml(page, lang) {
       <p class="eyebrow">${esc(content.eyebrow)}</p>
       <h1>${esc(content.h1)}</h1>
       <p class="intro">${esc(content.intro)}</p>
+      <img class="hero-image" src="${image}" alt="${esc(imageAlt)}" loading="eager" decoding="async" />
       <a class="cta" href="${registerUrl}">${esc(content.cta)}</a>
       <section>
         <h2>${lang === 'en' ? 'Key event facts' : 'イベント基本情報'}</h2>
@@ -427,6 +481,12 @@ function pageHtml(page, lang) {
       ${content.sections
         .map(([heading, body]) => `<section><h2>${esc(heading)}</h2><p>${esc(body)}</p></section>`)
         .join('')}
+      <section>
+        <h2>${lang === 'en' ? 'Related search topics' : '関連する検索トピック'}</h2>
+        <ul class="keywords">
+          ${pageKeywords.slice(0, 18).map((keyword) => `<li>${esc(keyword)}</li>`).join('')}
+        </ul>
+      </section>
       <section>
         <h2>${lang === 'en' ? 'Registration and healing line' : '参加登録と癒しのライン'}</h2>
         <p>${lang === 'en' ? 'Use the official registration form for attendance and the Healing Institute Japan form for healing-line details.' : '参加登録は公式フォームから行えます。癒しのラインに関する詳細はHealing Institute Japanのフォームをご確認ください。'}</p>
