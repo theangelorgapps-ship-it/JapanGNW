@@ -6,8 +6,8 @@ import ScrollReveal from './components/ScrollReveal';
 const DESKTOP_FRAME_COUNT = 192;
 const MOBILE_FRAME_SOURCE_COUNT = 361;
 const MOBILE_FRAME_COUNT = 240;
-const INITIAL_PRELOAD_COUNT = 18;
-const PRELOADER_MIN_VISIBLE_MS = 2600;
+const INITIAL_PRELOAD_COUNT = 6;
+const PRELOADER_MIN_VISIBLE_MS = 900;
 const PRELOADER_DISSOLVE_MS = 900;
 const MOBILE_FRAME_MAX_WIDTH = 767;
 const LOGO_URL = 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/686f096a627f396723165ccf.png';
@@ -311,7 +311,7 @@ const footerCopy = {
 
 const revealCopy = {
   en: `GOODNEWS HAS ARRIVED for the country of JAPAN 🇯🇵. The long awaited arrival of God’s mighty biological mouthpiece, Prophet Uebert Angel, is here! Japan your changing of season is upon you.`,
-  ja: `吉報が日本に到着しました 🇯🇵。長く待ち望まれていた、神の力強い生ける代弁者、預言者ユーバート・エンジェル師が来られます！日本よ、あなたの季節の変わり目が来ています。`,
+  ja: `素晴らしいニュースが日本に届きました 🇯🇵。生ける神の力強い代弁者、預言者ユーバート・エンジェル師がついに日本に来られます！日本の時が来ています！日本に祝福のシーズンがやって来ようとしています！`,
 };
 
 const dateVenueCopy = {
@@ -406,7 +406,7 @@ const sponsorSectionCopy = {
   },
   ja: {
     eyebrow: 'プロジェクト・ジャパン ｜ 2026年8月',
-    title: 'GoodNews Dailyをスポンサーする',
+    title: 'GoodNews Dailyのスポンサーになる',
     body:
       'この8月、GoodNews Dailyは「プロジェクト・ジャパン」を開始します。これは、日本全国に今この時のメッセージを届ける力強いアウトリーチです。現地のチームは主要都市や地域を巡り、福音を分かち合い、デイリーデボーショナルを配布し、あらゆる歩みの人々に希望を届けます。今日プロジェクト・ジャパンをスポンサーすることで、あなたはこの使命の直接的なパートナーとなり、この重要な時に神の御言葉をもって日本中の心に届く働きを助けることになります。',
     button: 'スポンサーになる',
@@ -509,7 +509,8 @@ function App() {
   const preloaderStartedAtRef = useRef(Date.now());
   const screen3Ref = useRef<HTMLDivElement | null>(null);
   const sponsorVideoRef = useRef<HTMLDivElement | null>(null);
-  const [sponsorSectionRef, isSponsorSectionNear] = useNearViewport<HTMLElement>('900px');
+  const [healingSectionRef, isHealingSectionNear] = useNearViewport<HTMLElement>('500px');
+  const [sponsorSectionRef, isSponsorSectionNear] = useNearViewport<HTMLElement>('300px');
   const aboutMenuRef = useRef<HTMLDivElement | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isPreloaderVisible, setIsPreloaderVisible] = useState(true);
@@ -660,13 +661,14 @@ function App() {
   }, [isSponsorOpen]);
 
   useEffect(() => {
+    if (!isFeatureVideoOpen && !isHealingSectionNear) return;
     if (document.querySelector(`script[src="${WISTIA_PLAYER_URL}"]`)) return;
 
     const script = document.createElement('script');
     script.src = WISTIA_PLAYER_URL;
     script.async = true;
     document.body.appendChild(script);
-  }, []);
+  }, [isFeatureVideoOpen, isHealingSectionNear]);
 
   useEffect(() => {
     if (!isAboutMenuOpen) return;
@@ -739,7 +741,7 @@ function App() {
     const initialVariant = getFrameVariant();
 
     const initialFrameCount = getFrameCount(initialVariant);
-    const initialPreloadCount = initialVariant === 'mobile' ? 18 : INITIAL_PRELOAD_COUNT;
+    const initialPreloadCount = initialVariant === 'mobile' ? 6 : INITIAL_PRELOAD_COUNT;
 
     for (let index = 0; index < Math.min(initialPreloadCount, initialFrameCount); index += 1) {
       loadFrame(index, initialVariant, !isCancelled);
@@ -749,8 +751,13 @@ function App() {
     const preloadNextBatch = () => {
       if (isCancelled || nextPreloadIndex >= initialFrameCount) return;
 
-      const batchSize = initialVariant === 'mobile' ? 3 : 10;
-      const batchDelay = initialVariant === 'mobile' ? 220 : 120;
+      if (document.visibilityState === 'hidden' || window.scrollY < window.innerHeight * 0.35) {
+        preloadTimer = window.setTimeout(preloadNextBatch, 650);
+        return;
+      }
+
+      const batchSize = initialVariant === 'mobile' ? 2 : 5;
+      const batchDelay = initialVariant === 'mobile' ? 420 : 260;
       const batchEnd = Math.min(nextPreloadIndex + batchSize, initialFrameCount);
       for (let index = nextPreloadIndex; index < batchEnd; index += 1) {
         loadFrame(index, initialVariant);
@@ -969,7 +976,7 @@ function App() {
                 role="menu"
               >
                 {[
-                  ['Healing is Easy / 回復は簡単だ。', '#healing', HEALING_INSTITUTE_LOGO_URL],
+                  ['Healing is Easy / 癒しは簡単だ。', '#healing', HEALING_INSTITUTE_LOGO_URL],
                   ['GoodNewsDaily / グッドニュースデイリー', '#goodnews-daily', GOODNEWS_DAILY_LOGO_URL],
                 ].map(([label, href, icon]) => (
                   <button
@@ -1352,7 +1359,7 @@ function App() {
                   rel="noreferrer"
                   className="mt-3 block max-w-[620px] text-[12px] font-medium leading-[1.45] text-white/70 underline-offset-4 transition-colors hover:text-white hover:underline sm:text-[13px] md:mt-4 md:max-w-[470px] lg:max-w-[560px]"
                 >
-                  <span className="md:hidden">Tokorozawa MUSE, Marquee Hall</span>
+                  <span className="md:hidden">ミューズ所沢 マーキーホール</span>
                   <span className="hidden md:inline">
                     会場：所沢市民文化センター ミューズ マーキーホール, 〒359-0042 埼玉県所沢市並木1-9-1
                     <br />
@@ -1397,7 +1404,6 @@ function App() {
                 <button
                   type="button"
                   aria-haspopup="dialog"
-                  aria-label="Watch the GoodNews Japan invitation video"
                   onClick={openFeatureVideo}
                   onPointerUp={openFeatureVideo}
                   className="group/video flex w-full items-center gap-3 p-2 text-left transition-colors hover:bg-white/8 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#d7b45a] sm:gap-5 sm:p-4"
@@ -1482,7 +1488,7 @@ function App() {
             <LanguageToggle revealLanguage={revealLanguage} setRevealLanguage={setRevealLanguage} />
           </motion.div>
 
-        <section className="relative mx-auto flex min-h-screen w-[90%] flex-col justify-center py-8 pointer-events-auto md:py-12 lg:py-16">
+        <section ref={healingSectionRef} className="relative mx-auto flex min-h-screen w-[90%] flex-col justify-center py-8 pointer-events-auto md:py-12 lg:py-16">
           <div className="w-full max-w-[1200px]">
             <ScrollReveal
               key={revealLanguage}
@@ -1560,18 +1566,39 @@ function App() {
                             {video.displayTitle}
                           </p>
                           <div className="relative w-full" style={{ paddingTop: '177.78%' }}>
-                            <iframe
-                              src={`https://fast.wistia.net/embed/iframe/${video.id}?web_component=true&seo=false`}
-                              title={video.title}
-                              allow="autoplay; fullscreen"
-                              frameBorder="0"
-                              scrolling="no"
-                              className="wistia_embed absolute left-0 top-0 h-full w-full"
-                              name="wistia_embed"
-                              width="100%"
-                              height="100%"
-                              loading="lazy"
-                            />
+                            {isHealingSectionNear && activeHealingVideoIndex === index ? (
+                              <iframe
+                                src={`https://fast.wistia.net/embed/iframe/${video.id}?web_component=true&seo=false`}
+                                title={video.title}
+                                allow="autoplay; fullscreen"
+                                frameBorder="0"
+                                scrolling="no"
+                                className="wistia_embed absolute left-0 top-0 h-full w-full"
+                                name="wistia_embed"
+                                width="100%"
+                                height="100%"
+                                loading="lazy"
+                              />
+                            ) : (
+                              <button
+                                type="button"
+                                onClick={() => goToHealingVideo(index)}
+                                className="absolute inset-0 overflow-hidden bg-black text-left"
+                                aria-label={`Load ${video.displayTitle} video`}
+                              >
+                                <img
+                                  src={`https://fast.wistia.com/embed/medias/${video.id}/swatch`}
+                                  alt=""
+                                  className="h-full w-full object-cover opacity-80"
+                                  loading="lazy"
+                                  decoding="async"
+                                />
+                                <span className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent" />
+                                <span className="absolute left-1/2 top-1/2 grid h-10 w-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-black/78 text-white shadow-lg backdrop-blur-sm">
+                                  <Play className="ml-0.5 h-4 w-4" fill="currentColor" strokeWidth={1.8} />
+                                </span>
+                              </button>
+                            )}
                           </div>
                         </motion.div>
                       ))}
