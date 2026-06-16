@@ -4,10 +4,10 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml"
 >
   <url>
-    <loc>https://goodnewsjapan.com/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://goodnewsjapan.com/" />
-    <xhtml:link rel="alternate" hreflang="ja" href="https://goodnewsjapan.com/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://goodnewsjapan.com/" />
+    <loc>https://www.goodnewsjapan.com/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.goodnewsjapan.com/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.goodnewsjapan.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.goodnewsjapan.com/" />
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
