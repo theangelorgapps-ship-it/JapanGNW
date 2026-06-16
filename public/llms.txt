@@ -21,3 +21,15 @@ Healing line: https://forms.zohopublic.eu/rikki/form/YourHealingClassroomAugustS
 Official site: https://www.goodnewsjapan.com/
 
 Organizer: GoodNews World.
+
+Static crawl pages:
+- English GoodNews Japan 2026: https://www.goodnewsjapan.com/en/goodnews-japan-2026/
+- Japanese GoodNews Japan 2026: https://www.goodnewsjapan.com/ja/goodnews-japan-2026/
+- English Uebert Angel Japan: https://www.goodnewsjapan.com/en/uebert-angel-japan/
+- Japanese Uebert Angel Japan: https://www.goodnewsjapan.com/ja/uebert-angel-japan/
+- English Spirit Embassy Japan: https://www.goodnewsjapan.com/en/spirit-embassy-japan/
+- Japanese Spirit Embassy Japan: https://www.goodnewsjapan.com/ja/spirit-embassy-japan/
+- English venue page: https://www.goodnewsjapan.com/en/venue/
+- Japanese venue page: https://www.goodnewsjapan.com/ja/venue/
+- English registration page: https://www.goodnewsjapan.com/en/register/
+- Japanese registration page: https://www.goodnewsjapan.com/ja/register/
