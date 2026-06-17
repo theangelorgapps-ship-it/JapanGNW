@@ -1983,8 +1983,9 @@ function MainSite() {
 function App() {
   const pathname = typeof window === 'undefined' ? '/' : window.location.pathname;
   const normalizedPathname = pathname.replace(/\/+$/, '') || '/';
+  const hiddenInterestPaths = new Set(['/Interest', '/interest', '/interst']);
 
-  if (normalizedPathname === '/Interest') {
+  if (hiddenInterestPaths.has(normalizedPathname)) {
     return <InterestPage />;
   }
 

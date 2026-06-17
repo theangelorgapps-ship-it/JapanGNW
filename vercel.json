@@ -1,0 +1,24 @@
+{
+  "redirects": [
+    {
+      "source": "/interest",
+      "destination": "/Interest",
+      "permanent": false
+    },
+    {
+      "source": "/interest/",
+      "destination": "/Interest",
+      "permanent": false
+    },
+    {
+      "source": "/interst",
+      "destination": "/Interest",
+      "permanent": false
+    },
+    {
+      "source": "/interst/",
+      "destination": "/Interest",
+      "permanent": false
+    }
+  ]
+}
