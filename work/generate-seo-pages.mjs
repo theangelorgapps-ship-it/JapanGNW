@@ -13,7 +13,7 @@ const healingUrl =
   'https://forms.zohopublic.eu/rikki/form/YourHealingClassroomAugustSessionwithTheRaahProphe/formperma/aKDRnUqNo_x0COJZBFJLc_aXWSKBBRTe3HiaRGL43Ig';
 
 const keywordClusters = {
-  brand: ['GoodNews Japan', 'GoodNewsJapan', 'GoodNews Japan 2026', 'GoodNews World Japan'],
+  brand: ['Good News Japan', 'GoodNews Japan', 'GoodNewsJapan', 'GoodNews Japan 2026', 'GoodNews World Japan'],
   prophet: [
     'Uebert Angel Japan',
     'Prophet Uebert Angel Japan',
@@ -60,9 +60,9 @@ const eventSchema = {
   '@id': `${site}/#event`,
   url: `${site}/`,
   name: 'GoodNews Japan 2026 with Prophet Uebert Angel',
-  alternateName: ['グッドニュース・ジャパン 2026', 'グッドニュースジャパン', 'GoodNews Japan'],
+  alternateName: ['Good News Japan', 'GoodNewsJapan', 'グッドニュース・ジャパン 2026', 'グッドニュースジャパン', 'GoodNews Japan'],
   description:
-    'GoodNews Japan 2026 with The Raah, Prophet Uebert Angel. A Christian event Japan 2026, healing event Japan, miracles event Japan, and prophetic conference Japan in Tokorozawa, Saitama, near Tokyo.',
+    'Good News Japan, GoodNewsJapan, and GoodNews Japan 2026 with The Raah, Prophet Uebert Angel. A Christian event Japan 2026, healing event Japan, miracles event Japan, and prophetic conference Japan in Tokorozawa, Saitama, near Tokyo.',
   keywords: allKeywordClusters,
   startDate: '2026-08-14',
   endDate: '2026-08-16',
@@ -152,15 +152,15 @@ const pages = [
   {
     slug: 'goodnews-japan-2026',
     en: {
-      title: 'GoodNews Japan 2026 | Prophet Uebert Angel in Saitama',
+      title: 'Good News Japan 2026 | GoodNewsJapan | Prophet Uebert Angel',
       description:
-        'Register for GoodNews Japan 2026 with Prophet Uebert Angel, August 14-16 at Tokorozawa Civic Cultural Centre MUSE in Saitama, near Tokyo.',
-      h1: 'GoodNews Japan 2026',
+        'Register for Good News Japan 2026, also searched as GoodNewsJapan, with Prophet Uebert Angel, August 14-16 at Tokorozawa MUSE in Saitama.',
+      h1: 'Good News Japan 2026',
       eyebrow: 'August 14-16, 2026 / Tokorozawa, Saitama',
       intro:
-        "GoodNews Japan 2026 is a healing and miracles event with The Raah, Prophet Uebert Angel, coming to Tokorozawa Civic Cultural Centre MUSE, Marquee Hall in Saitama, Japan. It is also relevant for searches like GoodNewsJapan, GoodNews World Japan, Christian event Japan 2026, prophetic conference Japan, healing event Japan, and miracles event Japan.",
+        "Good News Japan 2026 is the spaced-name search version of GoodNews Japan and GoodNewsJapan. It is a healing and miracles event with The Raah, Prophet Uebert Angel, coming to Tokorozawa Civic Cultural Centre MUSE, Marquee Hall in Saitama, Japan.",
       sections: [
-        ['Why GoodNews Japan matters', 'Japan is entering a special season of blessing, healing, miracles, and the GoodNews message. This page gives search engines and visitors a clear summary of the event, date, venue, speaker, and registration route for GoodNews Japan registration and GoodNews Japan tickets.'],
+        ['Why Good News Japan matters', 'Japan is entering a special season of blessing, healing, miracles, and the GoodNews message. This page gives search engines and visitors a clear summary of the event, date, venue, speaker, and registration route for GoodNews Japan registration and GoodNews Japan tickets.'],
         ['Event details', 'The event runs August 14-16, 2026 at Tokorozawa Civic Cultural Centre MUSE, Marquee Hall, 1-9-1 Namiki, Tokorozawa, Saitama 359-0042, Japan.'],
         ["Speaker and organizer", "The featured speaker is Prophet Uebert Angel. This connects search intent around Uebert Angel Japan, Prophet Uebert Angel Japan, The Ra'ah Japan, Uebert Angel Tokyo, and Uebert Angel Saitama with the official event details."],
       ],
