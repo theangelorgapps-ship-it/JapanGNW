@@ -24,6 +24,10 @@ const ZOHO_ATTENDANCE_FORM_URL =
   'https://forms.zohopublic.eu/rikki/form/LetUsKnowYoureComing/formperma/HXE-JEIrRKpAvUyNGhJ8wQmyaP3L2wKVsRK1zdSJPSo';
 const ZOHO_HEALING_FORM_URL =
   'https://forms.zohopublic.eu/rikki/form/YourHealingClassroomAugustSessionwithTheRaahProphe/formperma/aKDRnUqNo_x0COJZBFJLc_aXWSKBBRTe3HiaRGL43Ig';
+const ZOHO_INTEREST_FORM_URL =
+  'https://forms.zohopublic.eu/rikki/form/JapanProgramsRegistrationofInterest/formperma/yD7s_xMRXFNDZ8UYndDwhmFhvgtemMSANbCcjyCAe9g';
+const INTEREST_BACKGROUND_VIDEO_URL =
+  'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260306_115329_5e00c9c5-4d69-49b7-94c3-9c31c60bb644.mp4';
 const VENUE_MAP_URL =
   'https://www.google.com/maps/place//data=!4m2!3m1!1s0x6018dd914443816b:0x289a3ef1c6c5b4eb?entry=gemini&utm_source=gemini&utm_campaign=gem-default';
 
@@ -496,7 +500,113 @@ const legalCopy = {
   },
 };
 
-function App() {
+function InterestPage() {
+  const [interestFormUrl, setInterestFormUrl] = useState(ZOHO_INTEREST_FORM_URL);
+
+  useEffect(() => {
+    document.title = 'Japan Programs - Registration of Interest | GoodNews Japan';
+
+    try {
+      let ifrmSrc = ZOHO_INTEREST_FORM_URL;
+
+      if (!new RegExp('[?&]referrername=').test(ifrmSrc)) {
+        let rfr = window.location.href;
+
+        try {
+          rfr =
+            window.self !== window.top
+              ? window.top.location.href
+              : /^https?:\/\/[\w.-]+\.[a-zA-Z]{2,}/i.test(rfr)
+                ? rfr
+                : '';
+        } catch (error) {
+          // Cross-origin top frame access can fail; keep the safe current-page fallback.
+        }
+
+        if (rfr) {
+          if (rfr.length > 1800) {
+            const queryIndex = rfr.indexOf('?');
+            if (queryIndex > -1) {
+              rfr = rfr.substring(0, queryIndex);
+            }
+            if (rfr.length > 1800) {
+              rfr = rfr.substring(0, 1800);
+            }
+          }
+
+          ifrmSrc += `${ifrmSrc.indexOf('?') > 0 ? '&' : '?'}referrername=${encodeURIComponent(rfr)}`;
+        }
+      }
+
+      setInterestFormUrl(ifrmSrc);
+    } catch (error) {
+      setInterestFormUrl(ZOHO_INTEREST_FORM_URL);
+    }
+  }, []);
+
+  return (
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-black px-[5vw] py-8 font-sans text-white selection:bg-white selection:text-black sm:py-12">
+      <video
+        className="fixed inset-0 h-full w-full object-cover"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        poster={LOGO_URL}
+      >
+        <source src={INTEREST_BACKGROUND_VIDEO_URL} type="video/mp4" />
+      </video>
+      <div className="fixed inset-0 bg-[radial-gradient(circle_at_50%_18%,rgba(215,180,90,0.2),rgba(0,0,0,0.22)_36%,rgba(0,0,0,0.78)_100%),linear-gradient(180deg,rgba(0,0,0,0.34),rgba(0,0,0,0.78))]" />
+
+      <div className="relative z-10 w-full max-w-[980px]">
+        <div className="mb-7 flex items-center gap-3 sm:mb-9">
+          <img
+            src={LOGO_URL}
+            alt=""
+            width="52"
+            height="52"
+            className="h-11 w-11 object-contain drop-shadow-[0_10px_28px_rgba(0,0,0,0.5)] sm:h-[52px] sm:w-[52px]"
+          />
+          <span className="font-mono text-[11px] font-bold uppercase tracking-[0.14em] text-[#f0d794]/90">
+            GoodNews Japan 2026
+          </span>
+        </div>
+
+        <h1 className="max-w-[820px] text-[clamp(2.4rem,7vw,5.7rem)] font-semibold leading-[0.95] tracking-normal text-white drop-shadow-[0_18px_48px_rgba(0,0,0,0.72)]">
+          Japan Programs Registration of Interest
+        </h1>
+        <p className="my-5 max-w-[660px] text-[clamp(1rem,2vw,1.2rem)] leading-[1.55] text-white/78 drop-shadow-[0_10px_26px_rgba(0,0,0,0.75)] sm:mb-11">
+          Register your interest and stay connected with the Japan Programs team.
+        </p>
+
+        <section className="overflow-hidden border border-white/15 bg-white shadow-[0_28px_90px_rgba(0,0,0,0.42)]">
+          <div className="flex flex-col items-start justify-between gap-3 bg-[#0c0c0c]/95 px-5 py-[18px] sm:flex-row sm:items-center sm:px-7">
+            <p className="m-0 font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[#d7b45a]/90">
+              Registration of Interest
+            </p>
+            <a
+              href="/"
+              className="whitespace-nowrap font-mono text-[10px] font-bold uppercase tracking-[0.08em] text-white/64 no-underline transition-colors hover:text-white"
+            >
+              Back to site
+            </a>
+          </div>
+          <iframe
+            id="ziframe_185252"
+            aria-label="Japan Programs - Registration of Interest"
+            frameBorder="0"
+            style={{ height: 500, width: '99%', border: 'none' }}
+            src={interestFormUrl}
+            title="Japan Programs - Registration of Interest"
+          />
+        </section>
+      </div>
+    </main>
+  );
+}
+
+function MainSite() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const frameImagesRef = useRef<HTMLImageElement[]>([]);
   const loadedFramesRef = useRef<boolean[]>([]);
@@ -1868,6 +1978,17 @@ function App() {
       </main>
     </div>
   );
+}
+
+function App() {
+  const pathname = typeof window === 'undefined' ? '/' : window.location.pathname;
+  const normalizedPathname = pathname.replace(/\/+$/, '') || '/';
+
+  if (normalizedPathname === '/Interest') {
+    return <InterestPage />;
+  }
+
+  return <MainSite />;
 }
 
 export default App;
